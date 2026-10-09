@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preservación Digital y SGDEA</title>
+    <title>Preservación Digital a Largo Plazo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -25,6 +25,24 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #091d30; font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; }
 
+        /* Institutional background artwork.
+           The source artwork carries its own "Alcaldía de Barranquilla"
+           wordmark centered near the top; the image is shifted up so that
+           wordmark tucks behind the fixed header instead of sitting behind
+           slide titles, and darkened further at the very top for a clean seam. */
+        .bg-artwork {
+            background-image:
+                linear-gradient(180deg, rgba(5,15,26,0.95) 0%, rgba(5,15,26,0.88) 10%, rgba(5,15,26,0.55) 28%, rgba(5,15,26,0.58) 72%, rgba(5,15,26,0.85) 100%),
+                url("Fondo 1.png");
+            background-size: cover, cover;
+            background-position: center, center -92px;
+            background-repeat: no-repeat, no-repeat;
+            background-color: #091d30;
+        }
+        @media (max-width: 767px) {
+            .bg-artwork { background-position: center, 65% -60px; }
+        }
+
         /* Grain texture */
         .grain::before {
             content: '';
@@ -41,14 +59,16 @@
             position: absolute;
             inset: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
             opacity: 0;
             transform: translateX(60px);
-            transition: all 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
             pointer-events: none;
-            padding: 2rem;
+            padding: 104px 2rem 84px;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
+        .slide > .slide-inner { margin: auto; width: 100%; }
         .slide.active {
             opacity: 1;
             transform: translateX(0);
@@ -60,85 +80,70 @@
         }
 
         /* Stagger children animation */
-        .slide.active .stagger { animation: fadeUp 0.6s ease forwards; opacity: 0; }
-        .slide.active .stagger:nth-child(1) { animation-delay: 0.1s; }
-        .slide.active .stagger:nth-child(2) { animation-delay: 0.2s; }
-        .slide.active .stagger:nth-child(3) { animation-delay: 0.3s; }
-        .slide.active .stagger:nth-child(4) { animation-delay: 0.4s; }
-        .slide.active .stagger:nth-child(5) { animation-delay: 0.5s; }
-        .slide.active .stagger:nth-child(6) { animation-delay: 0.6s; }
-        .slide.active .stagger:nth-child(7) { animation-delay: 0.7s; }
-        .slide.active .stagger:nth-child(8) { animation-delay: 0.8s; }
+        .slide.active .stagger { animation: fadeUp 0.55s ease forwards; opacity: 0; }
+        .slide.active .stagger:nth-child(1) { animation-delay: 0.08s; }
+        .slide.active .stagger:nth-child(2) { animation-delay: 0.16s; }
+        .slide.active .stagger:nth-child(3) { animation-delay: 0.24s; }
+        .slide.active .stagger:nth-child(4) { animation-delay: 0.32s; }
+        .slide.active .stagger:nth-child(5) { animation-delay: 0.40s; }
+        .slide.active .stagger:nth-child(6) { animation-delay: 0.48s; }
+        .slide.active .stagger:nth-child(7) { animation-delay: 0.56s; }
+        .slide.active .stagger:nth-child(8) { animation-delay: 0.64s; }
 
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); filter: blur(4px); }
+            from { opacity: 0; transform: translateY(18px); filter: blur(4px); }
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
-
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
         }
-
         @keyframes pulse-glow {
             0%, 100% { box-shadow: 0 0 20px rgba(35,155,72,0.15); }
             50% { box-shadow: 0 0 40px rgba(35,155,72,0.3); }
         }
-
         @keyframes shimmer {
             0% { left: -100%; }
             20% { left: 200%; }
             100% { left: 200%; }
         }
-
-        .card-hover {
-            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.96) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .card-hover { transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .card-hover:hover {
             transform: translateY(-4px);
             box-shadow: 0 0 50px -10px rgba(35,155,72,0.3);
             border-color: rgba(35,155,72,0.3);
         }
 
-        .shimmer-btn {
-            position: relative;
-            overflow: hidden;
-        }
+        .shimmer-btn { position: relative; overflow: hidden; }
         .shimmer-btn::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
             background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);
             animation: shimmer 3s infinite cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Progress bar */
-        .progress-fill {
-            transition: width 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
+        .progress-fill { transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
 
-        /* Dot indicators */
-        .dot {
-            transition: all 0.4s ease;
-        }
-        .dot.active {
-            background: #239b48;
-            width: 2rem;
-            border-radius: 9999px;
-        }
+        .dot { transition: all 0.4s ease; }
+        .dot.active { background: #239b48; width: 1.6rem; border-radius: 9999px; }
 
-        /* Risk card red accent */
         .risk-card { border-left: 3px solid #ef4444; }
         .risk-card:hover { border-left-color: #f87171; box-shadow: 0 0 30px -8px rgba(239,68,68,0.3); }
+        .success-card { border-left: 3px solid #239b48; }
+        .success-card:hover { border-left-color: #239b48; box-shadow: 0 0 30px -8px rgba(35,155,72,0.3); }
 
-        /* Success card green accent */
-        .success-card { border-left: 3px solid #239b48 ; }
-        .success-card:hover { border-left-color: #239b48 ; box-shadow: 0 0 30px -8px rgba(35,155,72,0.3); }
-
-        /* Grid background */
         .grid-bg {
             background-image: linear-gradient(to right, rgba(34,34,34,0.5) 1px, transparent 1px),
                               linear-gradient(to bottom, rgba(34,34,34,0.5) 1px, transparent 1px);
@@ -146,16 +151,14 @@
             mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
         }
 
-        /* Number badge */
         .num-badge {
             background: linear-gradient(135deg, rgba(35,155,72,0.2), rgba(21,128,61,0.2));
             border: 1px solid rgba(35,155,72,0.3);
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { display: none; }
+        ::-webkit-scrollbar { width: 0; height: 0; display: none; }
+        * { scrollbar-width: none; }
 
-        /* Tooltip for keyboard hint */
         .kbd {
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.15);
@@ -164,37 +167,225 @@
             font-size: 0.65rem;
             font-family: 'Space Grotesk', monospace;
         }
+
+        /* ===== INTERACTIVE: norma chip (cita normativa clicable) ===== */
+        .norma-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.62rem;
+            letter-spacing: 0.02em;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            background: rgba(35,155,72,0.1);
+            border: 1px solid rgba(35,155,72,0.25);
+            color: #6ee7a0;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+        .norma-chip:hover { background: rgba(35,155,72,0.22); border-color: rgba(35,155,72,0.55); color: #fff; transform: translateY(-1px); }
+        .norma-chip.is-derogada { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: #fca5a5; }
+        .norma-chip.is-derogada:hover { background: rgba(239,68,68,0.2); color: #fff; }
+
+        /* ===== INTERACTIVE: flip cards ===== */
+        .flip { perspective: 1200px; cursor: pointer; height: 148px; }
+        .flip-inner {
+            position: relative;
+            width: 100%; height: 100%;
+            transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .flip.flipped .flip-inner { transform: rotateY(180deg); }
+        .flip-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .flip-back { transform: rotateY(180deg); }
+
+        /* ===== INTERACTIVE: tabs ===== */
+        .tab-btn {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #a3a3a3;
+        }
+        .tab-btn.active {
+            background: rgba(35,155,72,0.15);
+            border-color: rgba(35,155,72,0.45);
+            color: #fff;
+        }
+        .tab-panel { display: none; animation: popIn 0.4s ease forwards; }
+        .tab-panel.active { display: block; }
+
+        /* ===== INTERACTIVE: accordion ===== */
+        .acc-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
+            opacity: 0;
+        }
+        .acc-item.open .acc-body { max-height: 520px; opacity: 1; }
+        .acc-item.open .acc-chevron { transform: rotate(180deg); }
+        .acc-chevron { transition: transform 0.4s ease; }
+        .acc-item.open { border-color: rgba(35,155,72,0.4); background: rgba(35,155,72,0.04); }
+
+        /* ===== INTERACTIVE: risk board ===== */
+        .risk-chip {
+            cursor: pointer;
+            transition: all 0.28s cubic-bezier(0.2,0.8,0.2,1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .risk-chip:hover { border-color: rgba(35,155,72,0.4); transform: translateY(-2px); }
+        .risk-chip.selected {
+            background: rgba(239,68,68,0.12);
+            border-color: rgba(239,68,68,0.5);
+        }
+        .risk-chip.selected .risk-check { background: #ef4444; border-color: #ef4444; }
+        .risk-chip.dimmed { opacity: 0.25; filter: grayscale(1); }
+        .risk-check {
+            width: 16px; height: 16px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.25);
+            flex-shrink: 0;
+            transition: all 0.25s ease;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* ===== INTERACTIVE: checklist ===== */
+        .check-item { cursor: pointer; transition: all 0.3s ease; }
+        .check-item.done { background: rgba(35,155,72,0.07); border-color: rgba(35,155,72,0.4); }
+        .check-item.done .check-box { background: #239b48; border-color: #239b48; }
+        .check-item.done .check-title { text-decoration: line-through; text-decoration-color: rgba(35,155,72,0.6); }
+        .check-box {
+            width: 22px; height: 22px;
+            border-radius: 6px;
+            border: 1.5px solid rgba(255,255,255,0.2);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.25s ease;
+        }
+
+        /* ===== INTERACTIVE: quiz ===== */
+        .quiz-opt {
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.25s ease;
+        }
+        .quiz-opt:hover:not(.locked) { border-color: rgba(35,155,72,0.45); background: rgba(255,255,255,0.03); }
+        .quiz-opt.correct { background: rgba(35,155,72,0.14); border-color: #239b48; }
+        .quiz-opt.wrong { background: rgba(239,68,68,0.12); border-color: #ef4444; animation: shake 0.4s ease; }
+        .quiz-opt.locked { cursor: default; }
+
+        /* ===== INTERACTIVE: timeline ===== */
+        .tl-node { cursor: pointer; transition: all 0.3s ease; }
+        .tl-dot {
+            width: 14px; height: 14px;
+            border-radius: 9999px;
+            border: 2px solid rgba(255,255,255,0.25);
+            background: #091d30;
+            transition: all 0.3s ease;
+        }
+        .tl-node:hover .tl-dot { border-color: #239b48; }
+        .tl-node.active .tl-dot { background: #239b48; border-color: #239b48; box-shadow: 0 0 0 5px rgba(35,155,72,0.18); }
+        .tl-node.active .tl-label { color: #fff; }
+        .tl-node.derogada .tl-dot { border-color: rgba(239,68,68,0.5); }
+        .tl-node.derogada.active .tl-dot { background: #ef4444; border-color: #ef4444; box-shadow: 0 0 0 5px rgba(239,68,68,0.18); }
+
+        /* ===== Overlays (modal, índice, ayuda) ===== */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 60;
+            background: rgba(4,14,24,0.82);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .overlay.open { opacity: 1; pointer-events: auto; }
+        .overlay-panel {
+            background: #071826;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 1rem;
+            max-width: 46rem;
+            width: 100%;
+            max-height: 84vh;
+            overflow-y: auto;
+            transform: scale(0.96) translateY(12px);
+            transition: transform 0.35s cubic-bezier(0.2,0.8,0.2,1);
+        }
+        .overlay.open .overlay-panel { transform: scale(1) translateY(0); }
+
+        .idx-card {
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.25s ease;
+        }
+        .idx-card:hover { border-color: rgba(35,155,72,0.5); background: rgba(35,155,72,0.07); transform: translateY(-2px); }
+        .idx-card.current { border-color: #239b48; background: rgba(35,155,72,0.12); }
+
+        /* progress bar clicable */
+        #progressTrack { cursor: pointer; }
+        #progressTrack:hover { height: 5px; }
+        #progressTrack { transition: height 0.2s ease; }
+
+        @media (max-width: 767px) {
+            .slide { padding: 96px 1rem 92px; }
+            .flip { height: 170px; }
+        }
     </style>
 </head>
 <body class="grain text-white">
 
     <!-- Background Effects -->
+    <div class="fixed inset-0 bg-artwork pointer-events-none z-0"></div>
     <div class="fixed inset-0 grid-bg pointer-events-none z-0"></div>
     <div class="fixed top-1/4 -left-40 w-[600px] h-[600px] bg-[#239b48]/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
     <div class="fixed bottom-1/4 -right-40 w-[500px] h-[500px] bg-[#239b48]/4 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
     <!-- Top Bar -->
-    <header class="fixed top-0 left-0 right-0 z-30 px-6 py-5 flex items-center justify-between" style="backdrop-filter: blur(4px); background: rgba(9,29,48,0.6);">
+    <header class="fixed top-0 left-0 right-0 z-30 px-4 md:px-6 py-4 flex items-center justify-between" style="backdrop-filter: blur(4px); background: rgba(9,29,48,0.75);">
         <div class="flex items-center">
-            <img src="Logos__alcaldia.png" alt="Alcaldía de Barranquilla" style="height: 58px; filter: brightness(0) invert(1); opacity: 0.9;">
+            <img src="Logos__alcaldia.png" alt="Alcaldía de Barranquilla" style="height: 52px; filter: brightness(0) invert(1); opacity: 0.9;">
         </div>
-        <div class="flex items-center gap-4">
-            <span class="text-xs text-neutral-500 font-body hidden md:block">Divulgación Institucional</span>
-            <span id="slideCounter" class="text-xs font-heading text-neutral-400 bg-white/5 border border-white/10 px-3 py-1 rounded-full">01 / 10</span>
+        <div class="flex items-center gap-2 md:gap-3">
+            <span class="text-xs text-neutral-500 font-body hidden lg:block mr-1">Divulgación Institucional</span>
+            <button onclick="toggleIndex()" title="Índice de diapositivas (M)" class="flex items-center gap-2 text-xs font-heading text-neutral-300 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#239b48]/50 px-3 py-1.5 rounded-full transition-all">
+                <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+                <span id="slideCounter">01 / 13</span>
+            </button>
+            <button onclick="openFuentes()" title="Marco normativo citable (N)" class="hidden sm:flex items-center gap-2 text-xs font-heading text-neutral-300 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#239b48]/50 px-3 py-1.5 rounded-full transition-all">
+                <i data-lucide="scale" class="w-3.5 h-3.5"></i>
+                <span class="hidden md:inline">Normas</span>
+            </button>
+            <button onclick="toggleHelp()" title="Atajos de teclado (?)" class="w-8 h-8 flex items-center justify-center text-xs font-heading text-neutral-300 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all">?</button>
         </div>
     </header>
 
-    <!-- Progress Bar -->
-    <div class="fixed top-[88px] left-0 right-0 z-30 h-[2px] bg-white/5">
-        <div id="progressBar" class="progress-fill h-full bg-gradient-to-r from-[#239b48] to-[#239b48]" style="width: 10%"></div>
+    <!-- Progress Bar (clicable) -->
+    <div id="progressTrack" class="fixed top-[84px] left-0 right-0 z-30 h-[3px] bg-white/5" title="Clic para saltar a un punto de la presentación">
+        <div id="progressBar" class="progress-fill h-full bg-gradient-to-r from-[#239b48] to-[#3ddb79]" style="width: 7.7%"></div>
     </div>
 
     <!-- Slides Container -->
     <main id="slidesContainer" class="relative w-full h-full">
 
-        <!-- SLIDE 1: Portada -->
-        <section class="slide active" data-slide="0">
-            <div class="max-w-4xl mx-auto text-center">
+        <!-- ============ SLIDE 1: Portada ============ -->
+        <section class="slide active" data-slide="0" data-title="Portada" data-tema="Inicio">
+            <div class="slide-inner max-w-4xl mx-auto text-center">
                 <div class="stagger mb-6">
                     <span class="inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[#239b48] bg-[#239b48]/10 border border-[#239b48]/20 px-4 py-2 rounded-full">
                         <span class="w-1.5 h-1.5 bg-[#239b48] rounded-full animate-pulse"></span>
@@ -202,514 +393,508 @@
                     </span>
                 </div>
                 <h1 class="stagger font-heading font-semibold text-4xl md:text-6xl lg:text-7xl tracking-tighter leading-[0.9] mb-6">
-                    Preservación Digital<br>
-                    <span class="text-[#239b48]">y SGDEA</span>
+                    Preservación Digital <br>
+                    <span class="text-[#239b48]">A Largo Plazo</span>
                 </h1>
-                <p class="stagger text-neutral-400 text-base md:text-lg font-light max-w-2xl mx-auto mb-10 leading-relaxed">
-                    Conozca los fundamentos, responsabilidades y buenas prácticas para la gestión, preservación y uso correcto del Sistema de Gestión Documental Electrónica de Archivo.
+                <p class="stagger text-neutral-400 text-base md:text-lg font-light max-w-2xl mx-auto mb-8 leading-relaxed">
+                    Fundamentos, responsabilidades y buenas prácticas para la gestión, preservación y uso correcto del Sistema de Gestión de Documentos Electrónicos de Archivo (SGDEA).
                 </p>
+                <div class="stagger mb-9">
+                    <button class="norma-chip" data-norma="aufa">
+                        <i data-lucide="scale" class="w-3 h-3"></i> Marco vigente: Acuerdo 001 de 2024 (AGN)
+                    </button>
+                </div>
                 <div class="stagger flex flex-col sm:flex-row items-center justify-center gap-4">
                     <button onclick="goToSlide(1)" class="shimmer-btn bg-[#239b48] text-black font-heading font-medium text-sm tracking-wide px-8 py-3.5 rounded-full hover:scale-105 transition-transform duration-300" style="box-shadow: 0 0 20px rgba(35,155,72,0.6);">
                         Comenzar presentación
                     </button>
-                    <span class="text-neutral-500 text-xs flex items-center gap-2">
-                        Usa las flechas <span class="kbd">←</span> <span class="kbd">→</span>
-                    </span>
+                    <button onclick="goToSlide(4)" class="font-heading font-medium text-sm tracking-wide px-7 py-3.5 rounded-full border border-white/15 text-neutral-300 hover:border-[#239b48]/60 hover:text-white transition-all">
+                        Ver marco normativo
+                    </button>
                 </div>
-                <div class="stagger mt-16 flex items-center justify-center gap-8 text-neutral-500">
+                <div class="stagger mt-8 text-neutral-500 text-xs flex items-center justify-center gap-2">
+                    Navega con <span class="kbd">←</span> <span class="kbd">→</span> · índice <span class="kbd">M</span> · atajos <span class="kbd">?</span>
+                </div>
+                <div class="stagger mt-12 flex flex-wrap items-center justify-center gap-6 md:gap-8 text-neutral-500">
                     <div class="flex items-center gap-2 text-xs"><i data-lucide="file-text" class="w-3.5 h-3.5"></i> 4 Temas</div>
-                    <div class="flex items-center gap-2 text-xs"><i data-lucide="layers" class="w-3.5 h-3.5"></i> 10 Diapositivas</div>
-                    <div class="flex items-center gap-2 text-xs"><i data-lucide="clock" class="w-3.5 h-3.5"></i> ~5 min</div>
+                    <div class="flex items-center gap-2 text-xs"><i data-lucide="layers" class="w-3.5 h-3.5"></i> 13 Diapositivas</div>
+                    <div class="flex items-center gap-2 text-xs"><i data-lucide="mouse-pointer-click" class="w-3.5 h-3.5"></i> 6 Actividades</div>
+                    <div class="flex items-center gap-2 text-xs"><i data-lucide="clock" class="w-3.5 h-3.5"></i> ~12 min</div>
                 </div>
             </div>
         </section>
 
-        <!-- SLIDE 2: ¿Qué es Preservación Digital? -->
-        <section class="slide" data-slide="1">
-            <div class="max-w-5xl mx-auto w-full">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                    <div class="lg:col-span-7">
+        <!-- ============ SLIDE 2: ¿Qué es? + flip cards ============ -->
+        <section class="slide" data-slide="1" data-title="¿Qué es la preservación digital?" data-tema="Tema 1">
+            <div class="slide-inner max-w-6xl mx-auto w-full">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                    <div>
                         <div class="stagger flex items-center gap-2 mb-4">
                             <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading font-semibold text-sm text-[#239b48]">01</div>
                             <span class="text-xs font-mono tracking-widest uppercase text-neutral-500">Tema 1</span>
                         </div>
                         <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-5 leading-tight">
-                            ¿Qué es la <span class="text-[#239b48]">Preservación Digital a largo plazo</span>?
+                            ¿Qué es la Preservación Digital a largo plazo?
                         </h2>
-                        <p class="stagger text-neutral-400 font-light text-sm md:text-base leading-relaxed mb-6">
-                            Es el conjunto de acciones, estrategias y procedimientos orientados a garantizar el <strong class="text-neutral-200">acceso a largo plazo</strong> de los documentos digitales, preservando su autenticidad, integridad, confiabilidad y legibilidad a lo largo del tiempo.
+                        <p class="stagger text-neutral-400 text-sm md:text-base font-light leading-relaxed mb-4">
+                            Es el conjunto de principios, políticas, estrategias y acciones específicas que buscan asegurar la estabilidad física y tecnológica de los datos, la permanencia y el acceso a la información de los documentos digitales, y proteger su contenido intelectual por el tiempo que se considere necesario.
                         </p>
-                        <div class="stagger space-y-3">
-                            <div class="flex items-start gap-3">
-                                <div class="w-5 h-5 mt-0.5 rounded-full bg-[#239b48]/10 flex items-center justify-center flex-shrink-0">
-                                    <i data-lucide="check" class="w-3 h-3 text-[#239b48]"></i>
-                                </div>
-                                <p class="text-sm text-neutral-300">No es solo guardar archivos: es asegurar que <strong class="text-white">siguen siendo legibles</strong> y usables en el futuro.</p>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <div class="w-5 h-5 mt-0.5 rounded-full bg-[#239b48]/10 flex items-center justify-center flex-shrink-0">
-                                    <i data-lucide="check" class="w-3 h-3 text-[#239b48]"></i>
-                                </div>
-                                <p class="text-sm text-neutral-300">Abarca la <strong class="text-white">migración de formatos</strong>, la creación de copias de seguridad y los metadatos.</p>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <div class="w-5 h-5 mt-0.5 rounded-full bg-[#239b48]/10 flex items-center justify-center flex-shrink-0">
-                                    <i data-lucide="check" class="w-3 h-3 text-[#239b48]"></i>
-                                </div>
-                                <p class="text-sm text-neutral-300">Aplica a <strong class="text-white">documentos de archivo electrónicos, datos, registros y cualquier información digital</strong> de valor institucional.</p>
-                            </div>
+                        <div class="stagger mb-5 flex flex-wrap gap-2">
+                            <button class="norma-chip" data-norma="aufa">
+                                <i data-lucide="quote" class="w-3 h-3"></i> Definición literal: Acuerdo 001 de 2024, Anexo 1
+                            </button>
                         </div>
+                        <ul class="stagger space-y-3 text-sm text-neutral-400">
+                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-[#239b48] mt-0.5 flex-shrink-0"></i><span>No es solo guardar archivos: es asegurar que sigan siendo legibles, interpretables y usables en el futuro.</span></li>
+                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-[#239b48] mt-0.5 flex-shrink-0"></i><span>Abarca migración, conversión, emulación y <em>refreshing</em>, además de metadatos y copias de respaldo.</span></li>
+                            <li class="flex gap-3"><i data-lucide="check" class="w-4 h-4 text-[#239b48] mt-0.5 flex-shrink-0"></i><span>Aplica al documento electrónico de archivo en <strong>cualquier etapa del ciclo vital</strong>, sin importar el sistema que lo generó.</span></li>
+                        </ul>
                     </div>
-                    <div class="lg:col-span-5">
-                        <div class="stagger relative">
-                            <div class="absolute -inset-4 bg-[#239b48]/5 rounded-3xl blur-2xl"></div>
-                            <div class="relative bg-[#050505] border border-white/10 rounded-2xl p-6 space-y-4">
-                                <div class="flex items-center gap-3 pb-3 border-b border-white/5">
-                                    <i data-lucide="database" class="w-5 h-5 text-[#239b48]"></i>
-                                    <span class="font-heading text-sm text-neutral-200">Conceptos Clave</span>
-                                </div>
-                                <div class="space-y-3">
-                                    <div class="bg-white/[0.03] rounded-xl p-3.5 border border-white/5">
-                                        <p class="text-xs text-[#239b48] font-mono mb-1">Autenticidad</p>
-                                        <p class="text-xs text-neutral-400">El documento es lo que dice ser.</p>
-                                    </div>
-                                    <div class="bg-white/[0.03] rounded-xl p-3.5 border border-white/5">
-                                        <p class="text-xs text-[#239b48] font-mono mb-1">Integridad</p>
-                                        <p class="text-xs text-neutral-400">No ha sido alterado sin autorización.</p>
-                                    </div>
-                                    <div class="bg-white/[0.03] rounded-xl p-3.5 border border-white/5">
-                                        <p class="text-xs text-[#239b48] font-mono mb-1">Confiabilidad</p>
-                                        <p class="text-xs text-neutral-400">Es un registro completo y preciso.</p>
-                                    </div>
-                                    <div class="bg-white/[0.03] rounded-xl p-3.5 border border-white/5">
-                                        <p class="text-xs text-[#239b48] font-mono mb-1">Accesibilidad</p>
-                                        <p class="text-xs text-neutral-400">Puede ser consultado en cualquier momento.</p>
-                                    </div>
-                                </div>
-                            </div>
+
+                    <div class="stagger">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-heading font-medium text-sm text-neutral-300">Atributos que la norma obliga a mantener</h3>
+                            <span class="text-[0.6rem] font-heading text-[#239b48] flex items-center gap-1.5">
+                                <i data-lucide="mouse-pointer-click" class="w-3 h-3"></i> Clic para ver la norma
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <!-- flip cards se inyectan por JS -->
+                            <div id="conceptCards" class="contents"></div>
+                        </div>
+                        <div class="mt-3 bg-[#239b48]/5 border border-[#239b48]/15 rounded-xl p-3.5 flex items-start gap-3">
+                            <i data-lucide="info" class="w-4 h-4 text-[#239b48] mt-0.5 flex-shrink-0"></i>
+                            <p class="text-[0.7rem] text-neutral-400 leading-relaxed">
+                                Estos atributos no son recomendaciones: son el estándar de cumplimiento que el Archivo General de la Nación verifica en sus visitas de inspección, vigilancia y control.
+                                <button class="norma-chip ml-1" data-norma="ley594"><i data-lucide="scale" class="w-3 h-3"></i> Ley 594/2000 art. 35</button>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SLIDE 3: Pilares de la Preservación Digital -->
-        <section class="slide" data-slide="2">
-            <div class="max-w-5xl mx-auto w-full">
-                <div class="stagger flex items-center gap-2 mb-4">
+        <!-- ============ SLIDE 3: Estrategias y pilares (tabs) ============ -->
+        <section class="slide" data-slide="2" data-title="Estrategias y pilares" data-tema="Tema 1">
+            <div class="slide-inner max-w-5xl mx-auto w-full">
+                <div class="stagger flex items-center gap-2 mb-3">
                     <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading font-semibold text-sm text-[#239b48]">01</div>
                     <span class="text-xs font-mono tracking-widest uppercase text-neutral-500">Continuación</span>
                 </div>
-                <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-3">
-                    Pilares de la Preservación Digital
+                <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-2">
+                    Estrategias y pilares de la Preservación Digital
                 </h2>
-                <p class="stagger text-neutral-500 text-sm mb-10 max-w-2xl">Cuatro ejes fundamentales sostienen una estrategia eficaz de preservación.</p>
+                <p class="stagger text-neutral-400 text-sm font-light mb-6 max-w-3xl">
+                    La norma distingue entre las <strong class="text-neutral-200">cuatro estrategias técnicas</strong> que puede aplicar la entidad y los <strong class="text-neutral-200">pilares operativos</strong> que las hacen posibles.
+                </p>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div class="stagger card-hover bg-[#050505] border border-white/10 rounded-2xl p-6 group">
-                        <div class="w-10 h-10 rounded-xl bg-[#239b48]/10 border border-[#239b48]/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-                            <i data-lucide="hard-drive" class="w-5 h-5 text-[#239b48]"></i>
-                        </div>
-                        <h3 class="font-heading font-medium text-lg tracking-tight mb-2">Almacenamiento Seguro</h3>
-                        <p class="text-sm text-neutral-400 font-light leading-relaxed">Infraestructura redundante con copias en múltiples ubicaciones. Servidores con respaldo eléctrico y protección física.</p>
+                <div class="stagger flex flex-wrap gap-2 mb-6">
+                    <button class="tab-btn active font-heading text-xs px-4 py-2 rounded-full" data-tab="estrategias" onclick="switchTab('pilares','estrategias')">
+                        Estrategias normativas (4)
+                    </button>
+                    <button class="tab-btn font-heading text-xs px-4 py-2 rounded-full" data-tab="pilares" onclick="switchTab('pilares','pilares')">
+                        Pilares operativos (4)
+                    </button>
+                </div>
+
+                <!-- TAB: estrategias normativas -->
+                <div class="tab-panel active" data-group="pilares" data-panel="estrategias">
+                    <div class="mb-4">
+                        <button class="norma-chip" data-norma="aufa">
+                            <i data-lucide="scale" class="w-3 h-3"></i> Acuerdo 001 de 2024 (AGN), art. 6.1.3.5 — texto taxativo
+                        </button>
                     </div>
-                    <div class="stagger card-hover bg-[#050505] border border-white/10 rounded-2xl p-6 group">
-                        <div class="w-10 h-10 rounded-xl bg-[#239b48]/10 border border-[#239b48]/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-                            <i data-lucide="repeat" class="w-5 h-5 text-[#239b48]"></i>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-hover success-card bg-[#050505]/80 border border-white/10 rounded-xl p-5">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="move-right" class="w-5 h-5 text-[#239b48]"></i>
+                                <h3 class="font-heading font-medium text-lg tracking-tight">1. Migración</h3>
+                            </div>
+                            <p class="text-xs text-neutral-400 leading-relaxed">Cambio a nuevas plataformas (hardware y software) o nuevos medios, conservando el documento accesible.</p>
                         </div>
-                        <h3 class="font-heading font-medium text-lg tracking-tight mb-2">Migración de Formatos</h3>
-                        <p class="text-sm text-neutral-400 font-light leading-relaxed">Conversión periódica a formatos actuales para evitar la obsolescencia tecnológica. Ejemplo: .doc → .pdf/A.</p>
+                        <div class="card-hover success-card bg-[#050505]/80 border border-white/10 rounded-xl p-5">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="file-symlink" class="w-5 h-5 text-[#239b48]"></i>
+                                <h3 class="font-heading font-medium text-lg tracking-tight">2. Conversión</h3>
+                            </div>
+                            <p class="text-xs text-neutral-400 leading-relaxed">Cambio del documento electrónico de un formato a otro, con fines de preservación o consulta, previa identificación de necesidades.</p>
+                        </div>
+                        <div class="card-hover success-card bg-[#050505]/80 border border-white/10 rounded-xl p-5">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="monitor-play" class="w-5 h-5 text-[#239b48]"></i>
+                                <h3 class="font-heading font-medium text-lg tracking-tight">3. Emulación</h3>
+                            </div>
+                            <p class="text-xs text-neutral-400 leading-relaxed">Recreación, en sistemas actuales, del entorno de software y hardware necesario para leer formatos obsoletos.</p>
+                        </div>
+                        <div class="card-hover success-card bg-[#050505]/80 border border-white/10 rounded-xl p-5">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="refresh-cw" class="w-5 h-5 text-[#239b48]"></i>
+                                <h3 class="font-heading font-medium text-lg tracking-tight">4. <em>Refreshing</em></h3>
+                            </div>
+                            <p class="text-xs text-neutral-400 leading-relaxed">Transferencia de datos de un soporte a otro sin alterar el contenido, para evitar la degradación del medio.</p>
+                        </div>
                     </div>
-                    <div class="stagger card-hover bg-[#050505] border border-white/10 rounded-2xl p-6 group">
-                        <div class="w-10 h-10 rounded-xl bg-[#239b48]/10 border border-[#239b48]/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-                            <i data-lucide="tags" class="w-5 h-5 text-[#239b48]"></i>
-                        </div>
-                        <h3 class="font-heading font-medium text-lg tracking-tight mb-2">Metadatos</h3>
-                        <p class="text-sm text-neutral-400 font-light leading-relaxed">Información que describe el documento: origen, fecha, autor, formato, clasificación. Sin metadatos, el documento pierde contexto.</p>
+                    <div class="mt-4 bg-amber-500/5 border border-amber-500/15 rounded-xl p-4 flex items-start gap-3">
+                        <i data-lucide="alert-circle" class="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0"></i>
+                        <p class="text-[0.7rem] text-neutral-400 leading-relaxed">
+                            <strong class="text-amber-300">Requisito del parágrafo:</strong> la estrategia elegida debe estar <em>soportada, documentada y justificada</em>, con registro histórico de todas las acciones, vigilancia regular de desarrollos técnicos y un esquema de metadatos definido y almacenado.
+                        </p>
                     </div>
-                    <div class="stagger card-hover bg-[#050505] border border-white/10 rounded-2xl p-6 group">
-                        <div class="w-10 h-10 rounded-xl bg-[#239b48]/10 border border-[#239b48]/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
-                            <i data-lucide="scan-eye" class="w-5 h-5 text-[#239b48]"></i>
+                </div>
+
+                <!-- TAB: pilares operativos -->
+                <div class="tab-panel" data-group="pilares" data-panel="pilares">
+                    <div class="mb-4 flex flex-wrap gap-2">
+                        <button class="norma-chip" data-norma="aufa"><i data-lucide="scale" class="w-3 h-3"></i> Acuerdo 001/2024 arts. 6.1.1.1 y 6.1.3.2</button>
+                        <button class="norma-chip" data-norma="dec1080"><i data-lucide="scale" class="w-3 h-3"></i> Decreto 1080/2015 art. 2.8.2.5.8</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-hover bg-[#050505]/80 border border-white/10 rounded-xl p-5">
+                            <i data-lucide="hard-drive" class="w-5 h-5 text-[#239b48] mb-2"></i>
+                            <h3 class="font-heading font-medium text-lg tracking-tight mb-2">Almacenamiento seguro</h3>
+                            <p class="text-xs text-neutral-400 leading-relaxed">Infraestructura redundante con copias en múltiples ubicaciones y protección física y eléctrica de los repositorios institucionales.</p>
                         </div>
-                        <h3 class="font-heading font-medium text-lg tracking-tight mb-2">Control y Auditoría</h3>
-                        <p class="text-sm text-neutral-400 font-light leading-relaxed">Registro permanente de quién accede, modifica o consulta cada documento. Trazabilidad completa para garantizar transparencia.</p>
+                        <div class="card-hover bg-[#050505]/80 border border-white/10 rounded-xl p-5">
+                            <i data-lucide="file-type" class="w-5 h-5 text-[#239b48] mb-2"></i>
+                            <h3 class="font-heading font-medium text-lg tracking-tight mb-2">Formatos abiertos</h3>
+                            <p class="text-xs text-neutral-400 leading-relaxed">Los documentos electrónicos se disponen en <strong>formatos abiertos, libres y accesibles</strong> que permitan su correcta representación.
+                                <button class="norma-chip mt-2" data-norma="aufa"><i data-lucide="scale" class="w-3 h-3"></i> art. 7.1.2, parágrafo</button>
+                            </p>
+                        </div>
+                        <div class="card-hover bg-[#050505]/80 border border-white/10 rounded-xl p-5">
+                            <i data-lucide="tags" class="w-5 h-5 text-[#239b48] mb-2"></i>
+                            <h3 class="font-heading font-medium text-lg tracking-tight mb-2">Metadatos</h3>
+                            <p class="text-xs text-neutral-400 leading-relaxed">Metadatos de <strong>contenido, estructura y contexto</strong>, conservados y actualizados durante todo el ciclo de vida. Sin metadatos, el documento pierde su valor probatorio.
+                                <button class="norma-chip mt-2" data-norma="aufa"><i data-lucide="scale" class="w-3 h-3"></i> art. 4.3.2.2 num. 4</button>
+                            </p>
+                        </div>
+                        <div class="card-hover bg-[#050505]/80 border border-white/10 rounded-xl p-5">
+                            <i data-lucide="shield-check" class="w-5 h-5 text-[#239b48] mb-2"></i>
+                            <h3 class="font-heading font-medium text-lg tracking-tight mb-2">Control y trazabilidad</h3>
+                            <p class="text-xs text-neutral-400 leading-relaxed">Índice electrónico que se actualiza automáticamente y asegura autenticidad, integridad, inalterabilidad, fiabilidad y disponibilidad del expediente.
+                                <button class="norma-chip mt-2" data-norma="aufa"><i data-lucide="scale" class="w-3 h-3"></i> art. 4.3.2.3</button>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SLIDE 4: ¿Por qué es importante para la Alcaldía? -->
-        <section class="slide" data-slide="3">
-            <div class="max-w-5xl mx-auto w-full">
-                <div class="stagger flex items-center gap-2 mb-4">
+        <!-- ============ SLIDE 4: ¿Por qué importa? ============ -->
+        <section class="slide" data-slide="3" data-title="¿Por qué importa para la Alcaldía?" data-tema="Tema 1">
+            <div class="slide-inner max-w-5xl mx-auto w-full">
+                <div class="stagger flex items-center gap-2 mb-3">
                     <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading font-semibold text-sm text-[#239b48]">01</div>
                     <span class="text-xs font-mono tracking-widest uppercase text-neutral-500">Continuación</span>
                 </div>
-                <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-3">
-                    ¿Por qué es importante para <span class="text-[#239b48]">la Alcaldía</span>?
+                <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-6">
+                    ¿Por qué es importante para la Alcaldía?
                 </h2>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div class="stagger card-hover bg-[#050505] border border-white/10 rounded-2xl p-6 group">
-                    <div class="space-y-8">
-                        <div class="bg-white/[0.03] rounded-xl p-3.5 border border-white/5">
-                            <p class="text-xs text-[#239b48] font-mono mb-1">15 riesgos documentales a identificar en las dependencias</p>
-                        </div>
-                        <div class="bg-white/[0.03] rounded-xl p-3.5 border border-white/5">
-                            <p class="text-xs text-[#239b48] font-mono mb-1">100% de entidades públicas obligadas por normativa AGN</p>
-                        </div>
-                        <div class="bg-white/[0.03] rounded-xl p-3.5 border border-white/5">
-                            <p class="text-xs text-[#239b48] font-mono mb-1">0 garantías sin una estrategia de preservación formal</p>
-                        </div>
+                <div class="stagger grid grid-cols-1 sm:grid-cols-3 gap-4 mb-7">
+                    <div class="bg-[#050505]/80 border border-white/10 rounded-xl p-5 text-center">
+                        <p class="font-heading text-4xl font-light text-[#239b48] tracking-tighter mb-1" data-count="15">0</p>
+                        <p class="text-[0.7rem] text-neutral-400 leading-snug">riesgos documentales a identificar en las dependencias</p>
+                        <p class="text-[0.6rem] text-neutral-600 mt-2 font-heading">Inventario interno · diagnóstico</p>
                     </div>
+                    <div class="bg-[#050505]/80 border border-white/10 rounded-xl p-5 text-center">
+                        <p class="font-heading text-4xl font-light text-[#239b48] tracking-tighter mb-1"><span data-count="8">0</span></p>
+                        <p class="text-[0.7rem] text-neutral-400 leading-snug">riesgos mínimos que la norma <strong>obliga</strong> a evaluar y tratar</p>
+                        <button class="norma-chip mt-2" data-norma="aufa"><i data-lucide="scale" class="w-3 h-3"></i> art. 6.1.3.4</button>
                     </div>
+                    <div class="bg-[#050505]/80 border border-white/10 rounded-xl p-5 text-center">
+                        <p class="font-heading text-4xl font-light text-[#239b48] tracking-tighter mb-1"><span data-count="6">0</span> <span class="text-xl">meses</span></p>
+                        <p class="text-[0.7rem] text-neutral-400 leading-snug">plazo que tuvieron los sujetos obligados para adoptar el Acuerdo 001 de 2024</p>
+                        <button class="norma-chip mt-2" data-norma="aufa"><i data-lucide="scale" class="w-3 h-3"></i> art. 10.2, par. 1</button>
+                    </div>
+                </div>
 
-                <div class="stagger space-y-2">
-                    <div class="flex items-start gap-3 bg-[#050505] border border-white/5 rounded-xl p-3 hover:border-white/10 transition-colors duration-300">
-                        <div class="num-badge w-6 h-6 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0 mt-0.5">1</div>
-                        <p class="text-sm text-neutral-300">Cumplimiento legal ante el Archivo General de la Nación (AGN) y normativa vigente.</p>
+                <div class="stagger space-y-2.5">
+                    <div class="flex items-start gap-4 bg-white/[0.02] border border-white/10 rounded-xl p-4">
+                        <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading text-xs text-[#239b48] flex-shrink-0">1</div>
+                        <div>
+                            <p class="text-sm text-neutral-300 leading-snug">Cumplimiento legal: la Alcaldía es <strong>sujeto obligado</strong> de la normativa archivística como entidad del orden distrital.</p>
+                            <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                <button class="norma-chip" data-norma="aufa">Acuerdo 001/2024 art. 1.1.2</button>
+                                <button class="norma-chip" data-norma="ley594">Ley 594/2000 arts. 2 y 11</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-start gap-3 bg-[#050505] border border-white/5 rounded-xl p-3 hover:border-white/10 transition-colors duration-300">
-                        <div class="num-badge w-6 h-6 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0 mt-0.5">2</div>
-                        <p class="text-sm text-neutral-300">Protección del patrimonio documental de todos los barranquilleros.</p>
+                    <div class="flex items-start gap-4 bg-white/[0.02] border border-white/10 rounded-xl p-4">
+                        <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading text-xs text-[#239b48] flex-shrink-0">2</div>
+                        <div>
+                            <p class="text-sm text-neutral-300 leading-snug">Protección del patrimonio documental de todos los barranquilleros: los documentos públicos son <strong>propiedad del Estado</strong>.</p>
+                            <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                <button class="norma-chip" data-norma="aufa">Acuerdo 001/2024 art. 1.3.3, par.</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-start gap-3 bg-[#050505] border border-white/5 rounded-xl p-3 hover:border-white/10 transition-colors duration-300">
-                        <div class="num-badge w-6 h-6 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0 mt-0.5">3</div>
-                        <p class="text-sm text-neutral-300">Continuidad del servicio: documentos disponibles cuando se necesiten.</p>
+                    <div class="flex items-start gap-4 bg-white/[0.02] border border-white/10 rounded-xl p-4">
+                        <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading text-xs text-[#239b48] flex-shrink-0">3</div>
+                        <div>
+                            <p class="text-sm text-neutral-300 leading-snug">Continuidad del servicio: los documentos y sus metadatos deben mantenerse disponibles a los grupos de interés.</p>
+                            <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                <button class="norma-chip" data-norma="aufa">Acuerdo 001/2024 art. 7.1.2</button>
+                                <button class="norma-chip" data-norma="ley1712">Ley 1712/2014 art. 16</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-start gap-3 bg-[#050505] border border-white/5 rounded-xl p-3 hover:border-white/10 transition-colors duration-300">
-                        <div class="num-badge w-6 h-6 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0 mt-0.5">4</div>
-                        <p class="text-sm text-neutral-300">Rendición de cuentas y transparencia ante organismos de control.</p>
+                    <div class="flex items-start gap-4 bg-white/[0.02] border border-white/10 rounded-xl p-4">
+                        <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading text-xs text-[#239b48] flex-shrink-0">4</div>
+                        <div>
+                            <p class="text-sm text-neutral-300 leading-snug">Rendición de cuentas y transparencia: el Programa de Gestión Documental es obligatorio para todo sujeto obligado.</p>
+                            <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                <button class="norma-chip" data-norma="ley1712">Ley 1712/2014 arts. 15 y 17</button>
+                                <button class="norma-chip" data-norma="ley594">Ley 594/2000 art. 21</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-start gap-3 bg-[#050505] border border-white/5 rounded-xl p-3 hover:border-white/10 transition-colors duration-300">
-                        <div class="num-badge w-6 h-6 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0 mt-0.5">5</div>
-                        <p class="text-sm text-neutral-300">Reducción del riesgo de pérdidas irreversibles por fallas tecnológicas o cambio de funcionarios.</p>
+                    <div class="flex items-start gap-4 bg-white/[0.02] border border-white/10 rounded-xl p-4">
+                        <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading text-xs text-[#239b48] flex-shrink-0">5</div>
+                        <div>
+                            <p class="text-sm text-neutral-300 leading-snug">Reducción del riesgo de pérdidas irreversibles por obsolescencia tecnológica, desastres, ataques, fallas organizacionales o error humano.</p>
+                            <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                <button class="norma-chip" data-norma="aufa">Acuerdo 001/2024 art. 6.1.3.4</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SLIDE 5: Responsabilidades Institucionales -->
-        <section class="slide" data-slide="4">
-            <div class="max-w-5xl mx-auto w-full">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <div class="lg:col-span-5">
-                        <div class="stagger flex items-center gap-2 mb-4">
-                            <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading font-semibold text-sm text-[#239b48]">02</div>
-                            <span class="text-xs font-mono tracking-widest uppercase text-neutral-500">Tema 2</span>
-                        </div>
-                        <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-5 leading-tight">
-                            Responsabilidades <span class="text-[#239b48]">Institucionales</span>
-                        </h2>
-                        <p class="stagger text-neutral-400 font-light text-sm md:text-base leading-relaxed mb-6">
-                            La preservación digital es una responsabilidad <strong class="text-neutral-200">compartida y jerárquica</strong>. Cada nivel de la organización cumple un rol específico e indispensable.
+        <!-- ============ SLIDE 5: Marco normativo (timeline interactivo) ============ -->
+        <section class="slide" data-slide="4" data-title="Marco normativo vigente" data-tema="Normativa">
+            <div class="slide-inner max-w-6xl mx-auto w-full">
+                <div class="stagger flex items-center gap-2 mb-3">
+                    <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading font-semibold text-sm text-[#239b48]"><i data-lucide="scale" class="w-3.5 h-3.5"></i></div>
+                    <span class="text-xs font-mono tracking-widest uppercase text-neutral-500">Marco normativo</span>
+                </div>
+                <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-2">
+                    ¿Qué podemos citar y con qué norma?
+                </h2>
+                <p class="stagger text-neutral-400 text-sm font-light mb-6 max-w-3xl">
+                    Recorrido por las normas que sustentan esta presentación. Haga clic en cada hito para ver los artículos exactos que se pueden citar.
+                </p>
+
+                <div class="stagger grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] gap-8">
+                    <div id="timeline" class="relative pl-1"></div>
+                    <div id="timelineDetail" class="bg-[#050505]/80 border border-white/10 rounded-xl p-6 self-start min-h-[340px]"></div>
+                </div>
+
+                <div class="stagger mt-6 bg-red-500/[0.06] border border-red-500/20 rounded-xl p-4 flex items-start gap-3">
+                    <i data-lucide="alert-octagon" class="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0"></i>
+                    <div>
+                        <p class="text-xs text-red-300 font-medium mb-1">Alerta de vigencia</p>
+                        <p class="text-[0.7rem] text-neutral-400 leading-relaxed">
+                            El <strong>Acuerdo 001 de 2024</strong> derogó expresamente los Acuerdos 006 de 2014 (Sistema Integrado de Conservación), 003 de 2015 (documentos electrónicos), 002 de 2014, 005 de 2013, 008 de 2014 y 004 de 2019, entre otros. Todo documento interno que aún los cite como fundamento debe actualizarse.
+                            <button class="norma-chip ml-1 is-derogada" data-norma="derogados"><i data-lucide="ban" class="w-3 h-3"></i> Ver lista de derogatorias</button>
                         </p>
-                        <div class="stagger bg-[#239b48]/5 border border-[#239b48]/10 rounded-xl p-4">
-                            <div class="flex items-start gap-3">
-                                <i data-lucide="alert-triangle" class="w-4 h-4 text-[#239b48] mt-0.5 flex-shrink-0"></i>
-                                <p class="text-xs text-[#239b48]/80 leading-relaxed">La Ley 527 de 1999 exige que las entidades públicas garanticen la conservación de sus documentos digitales. El incumplimiento puede generar responsabilidad administrativa, civil o penal.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lg:col-span-7">
-                        <div class="space-y-4">
-                            <div class="stagger card-hover bg-[#050505] border border-white/10 rounded-2xl p-5 flex gap-4">
-                                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#239b48]/20 to-green-600/20 border border-[#239b48]/20 flex items-center justify-center flex-shrink-0">
-                                    <i data-lucide="crown" class="w-5 h-5 text-[#239b48]"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-heading font-medium text-base mb-1">Alta Dirección</h3>
-                                    <p class="text-xs text-neutral-400 leading-relaxed">Asignar recursos, aprobar políticas de gestión documental y garantizar el compromiso institucional con la preservación digital.</p>
-                                </div>
-                            </div>
-                            <div class="stagger card-hover bg-[#050505] border border-white/10 rounded-2xl p-5 flex gap-4">
-                                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#239b48]/20 to-green-600/20 border border-[#239b48]/20 flex items-center justify-center flex-shrink-0">
-                                    <i data-lucide="folder-kanban" class="w-5 h-5 text-[#239b48]"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-heading font-medium text-base mb-1">Oficina de Gestión Documental / Archivo</h3>
-                                    <p class="text-xs text-neutral-400 leading-relaxed">Diseñar tablas de retención, aplicar cuadros de clasificación, supervisar la digitalización y garantizar la calidad de los procesos.</p>
-                                </div>
-                            </div>
-                            <div class="stagger card-hover bg-[#050505] border border-white/10 rounded-2xl p-5 flex gap-4">
-                                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#239b48]/20 to-green-600/20 border border-[#239b48]/20 flex items-center justify-center flex-shrink-0">
-                                    <i data-lucide="monitor" class="w-5 h-5 text-[#239b48]"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-heading font-medium text-base mb-1">Área de Tecnología (TI)</h3>
-                                    <p class="text-xs text-neutral-400 leading-relaxed">Mantener la infraestructura, realizar respaldos, gestionar el SGDEA y asegurar la disponibilidad y seguridad de la plataforma.</p>
-                                </div>
-                            </div>
-                            <div class="stagger card-hover bg-[#050505] border border-white/10 rounded-2xl p-5 flex gap-4">
-                                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#239b48]/20 to-green-600/20 border border-[#239b48]/20 flex items-center justify-center flex-shrink-0">
-                                    <i data-lucide="users" class="w-5 h-5 text-[#239b48]"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-heading font-medium text-base mb-1">Cada Funcionario</h3>
-                                    <p class="text-xs text-neutral-400 leading-relaxed">Radicar, tramitar y organizar documentos correctamente en el SGDEA. No conservar archivos fuera del sistema institucional.</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SLIDE 6: 15 Riesgos Documentales -->
-        <section class="slide" data-slide="5">
-            <div class="max-w-5xl mx-auto w-full">
+        <!-- ============ SLIDE 6: Responsabilidades (acordeón) ============ -->
+        <section class="slide" data-slide="5" data-title="Responsabilidades institucionales" data-tema="Tema 2">
+            <div class="slide-inner max-w-5xl mx-auto w-full">
+                <div class="stagger flex items-center gap-2 mb-3">
+                    <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading font-semibold text-sm text-[#239b48]">02</div>
+                    <span class="text-xs font-mono tracking-widest uppercase text-neutral-500">Tema 2</span>
+                </div>
+                <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-3 leading-tight">
+                    Responsabilidades Institucionales
+                </h2>
+                <p class="stagger text-neutral-400 text-sm font-light leading-relaxed mb-5 max-w-3xl">
+                    La preservación digital es una responsabilidad compartida y jerárquica. Cada nivel cumple un rol específico e indispensable.
+                    <span class="text-neutral-300">Despliegue cada nivel para ver su fundamento normativo.</span>
+                </p>
+
+                <div class="stagger bg-amber-500/[0.06] border border-amber-500/20 rounded-xl p-4 mb-5 flex items-start gap-3">
+                    <i data-lucide="gavel" class="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0"></i>
+                    <p class="text-xs text-neutral-300 leading-relaxed">
+                        Los servidores públicos que se trasladen, retiren o posesionen <strong>omitiendo la entrega, la debida gestión y el recibo</strong> de los documentos y archivos, responderán ante las autoridades <strong class="text-amber-300">disciplinarias, penales, fiscales o administrativas</strong> por las consecuencias de esa omisión.
+                        <button class="norma-chip ml-1" data-norma="aufa"><i data-lucide="quote" class="w-3 h-3"></i> Acuerdo 001/2024 art. 1.3.3 — literal</button>
+                    </p>
+                </div>
+
+                <div id="responsabilidades" class="stagger space-y-2.5"></div>
+            </div>
+        </section>
+
+        <!-- ============ SLIDE 7: 15 riesgos (tablero autodiagnóstico) ============ -->
+        <section class="slide" data-slide="6" data-title="15 riesgos documentales · autodiagnóstico" data-tema="Tema 3">
+            <div class="slide-inner max-w-6xl mx-auto w-full">
                 <div class="stagger flex items-center gap-2 mb-3">
                     <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading font-semibold text-sm text-[#239b48]">03</div>
                     <span class="text-xs font-mono tracking-widest uppercase text-neutral-500">Tema 3</span>
                 </div>
-                <h2 class="stagger font-heading font-medium text-2xl md:text-3xl tracking-tight mb-5 leading-tight">
-                    <span class="text-[#239b48]">15</span> riesgos documentales a identificar
-                </h2>
+                <div class="stagger flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-5">
+                    <div>
+                        <h2 class="font-heading font-medium text-3xl md:text-4xl tracking-tight mb-1">15 riesgos documentales a identificar</h2>
+                        <p class="text-neutral-400 text-sm font-light">Marque los que reconoce en su dependencia. El resultado es un autodiagnóstico, no un registro oficial.</p>
+                    </div>
+                    <div class="bg-[#050505]/80 border border-white/10 rounded-xl px-5 py-3 text-center flex-shrink-0">
+                        <p class="font-heading text-3xl font-light tracking-tighter"><span id="riskScore" class="text-red-400">0</span><span class="text-neutral-600 text-lg">/15</span></p>
+                        <p class="text-[0.6rem] text-neutral-500 font-heading tracking-wide">riesgos presentes</p>
+                    </div>
+                </div>
 
-                <div class="stagger grid grid-cols-3 gap-2.5">
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">1</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Almacenamiento local en equipos personales</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">2</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Uso inadecuado de unidades compartidas</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">3</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Documentos que no ingresan al SGDEA</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">4</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Correos electrónicos como repositorio</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">5</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Formatos no estandarizados (DWG, MDB, MPP)</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">6</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Ausencia de metadatos</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">7</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Duplicidad documental sin control de versiones</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">8</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Dependencia de un solo funcionario</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">9</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Uso de medios extraíbles (USB, CD)</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">10</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Falta de copias de seguridad</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">11</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Información en aplicaciones no institucionales</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">12</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Documentos sin clasificación documental (TRD)</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">13</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Ausencia de firmas electrónicas</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">14</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Información crítica sin identificar</p>
-                    </div>
-                    <div class="flex items-center gap-3 bg-[#050505] border border-white/8 rounded-xl px-3 py-2.5 hover:border-[#239b48]/20 transition-colors duration-300">
-                        <div class="num-badge w-7 h-7 rounded-full flex items-center justify-center font-heading font-semibold text-xs text-[#239b48] flex-shrink-0">15</div>
-                        <p class="text-xs text-neutral-300 leading-snug">Desconocimiento de lineamientos de preservación</p>
-                    </div>
+                <div class="stagger flex flex-wrap items-center gap-2 mb-4">
+                    <span class="text-[0.65rem] font-heading text-neutral-500 uppercase tracking-wider mr-1">Filtrar:</span>
+                    <button class="tab-btn active font-heading text-[0.68rem] px-3 py-1.5 rounded-full" onclick="filterRisks('todos', this)">Todos</button>
+                    <button class="tab-btn font-heading text-[0.68rem] px-3 py-1.5 rounded-full" onclick="filterRisks('ubicacion', this)">Ubicación del documento</button>
+                    <button class="tab-btn font-heading text-[0.68rem] px-3 py-1.5 rounded-full" onclick="filterRisks('tecnico', this)">Técnico / formato</button>
+                    <button class="tab-btn font-heading text-[0.68rem] px-3 py-1.5 rounded-full" onclick="filterRisks('organizacional', this)">Organizacional</button>
+                    <button class="tab-btn font-heading text-[0.68rem] px-3 py-1.5 rounded-full" onclick="filterRisks('seguridad', this)">Seguridad y validez</button>
+                    <button class="ml-auto text-[0.65rem] font-heading text-neutral-500 hover:text-white transition-colors flex items-center gap-1.5" onclick="resetRisks()">
+                        <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Reiniciar
+                    </button>
+                </div>
+
+                <div id="riskBoard" class="stagger grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5"></div>
+
+                <div id="riskSummary" class="stagger mt-5 bg-white/[0.02] border border-white/10 rounded-xl p-4 flex items-start gap-3">
+                    <i data-lucide="clipboard-list" class="w-4 h-4 text-[#239b48] mt-0.5 flex-shrink-0"></i>
+                    <p class="text-[0.72rem] text-neutral-400 leading-relaxed">
+                        Cada riesgo abre una ficha con su <strong>categoría</strong>, el <strong>riesgo normativo del art. 6.1.3.4</strong> con el que se corresponde y la <strong>norma aplicable</strong>. Use este tablero como insumo para el diagnóstico integral de gestión documental, que es requisito previo para formular los planes del SIC.
+                        <button class="norma-chip ml-1" data-norma="aufa"><i data-lucide="scale" class="w-3 h-3"></i> art. 6.1.1.2, parágrafo</button>
+                    </p>
                 </div>
             </div>
         </section>
 
-        <!-- SLIDE 7: Riesgos del Mal Manejo Documental -->
-        <section class="slide" data-slide="6">
-            <div class="max-w-5xl mx-auto w-full">
-                <div class="stagger flex items-center gap-2 mb-4">
-                    <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading font-semibold text-sm text-[#239b48]">03</div>
-                    <span class="text-xs font-mono tracking-widest uppercase text-neutral-500">Tema 3</span>
-                </div>
-                <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-3">
-                    Riesgos del <span class="text-red-400">Mal Manejo</span> Documental
-                </h2>
-                <p class="stagger text-neutral-500 text-sm mb-10 max-w-2xl">Consecuencias reales de no aplicar buenas prácticas en la gestión y preservación de documentos.</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div class="stagger risk-card card-hover bg-[#050505] border border-white/10 rounded-2xl p-5">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                                <i data-lucide="file-x" class="w-4 h-4 text-red-400"></i>
-                            </div>
-                            <h3 class="font-heading font-medium text-sm">Pérdida de Información</h3>
-                        </div>
-                        <p class="text-xs text-neutral-400 leading-relaxed">Documentos de archivos institucionales eliminados por error, discos dañados o formatos obsoletos que ya no pueden abrirse. La información se pierde de forma irreversible.</p>
-                    </div>
-                    <div class="stagger risk-card card-hover bg-[#050505] border border-white/10 rounded-2xl p-5">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                                <i data-lucide="scale" class="w-4 h-4 text-red-400"></i>
-                            </div>
-                            <h3 class="font-heading font-medium text-sm">Responsabilidad Legal</h3>
-                        </div>
-                        <p class="text-xs text-neutral-400 leading-relaxed">Incumplimiento de normas archivísticas (Ley 594 de 2000, Ley 1712 de 2014). Sanciones por pérdida o alteración de documentos públicos.</p>
-                    </div>
-                    <div class="stagger risk-card card-hover bg-[#050505] border border-white/10 rounded-2xl p-5">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                                <i data-lucide="clock" class="w-4 h-4 text-red-400"></i>
-                            </div>
-                            <h3 class="font-heading font-medium text-sm">Retrasos en Trámites</h3>
-                        </div>
-                        <p class="text-xs text-neutral-400 leading-relaxed">Documentos mal radicados, sin clasificar o duplicados generan demoras, quejas ciudadanas e ineficiencia en la atención al público.</p>
-                    </div>
-                    <div class="stagger risk-card card-hover bg-[#050505] border border-white/10 rounded-2xl p-5">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                                <i data-lucide="eye-off" class="w-4 h-4 text-red-400"></i>
-                            </div>
-                            <h3 class="font-heading font-medium text-sm">Vulneración de Seguridad</h3>
-                        </div>
-                        <p class="text-xs text-neutral-400 leading-relaxed">Documentos confidenciales en equipos personales, sin cifrado o accesibles para personal no autorizado. Riesgo de fuga de datos sensibles.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SLIDE 8: Impacto visual de los riesgos -->
-        <section class="slide" data-slide="7">
-            <div class="max-w-5xl mx-auto w-full">
-                <div class="stagger flex items-center gap-2 mb-4">
+        <!-- ============ SLIDE 8: Los 8 riesgos normativos ============ -->
+        <section class="slide" data-slide="7" data-title="Los 8 riesgos que la norma obliga a evaluar" data-tema="Tema 3">
+            <div class="slide-inner max-w-6xl mx-auto w-full">
+                <div class="stagger flex items-center gap-2 mb-3">
                     <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading font-semibold text-sm text-[#239b48]">03</div>
                     <span class="text-xs font-mono tracking-widest uppercase text-neutral-500">Continuación</span>
                 </div>
-                <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-10">
-                    ¿Qué pasa si no actuamos?
+                <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-2">
+                    Los 8 riesgos que la norma obliga a evaluar
                 </h2>
+                <p class="stagger text-neutral-400 text-sm font-light mb-5 max-w-3xl">
+                    No son cifras ni estimaciones: son los riesgos mínimos que el Acuerdo 001 de 2024 exige <strong class="text-neutral-200">evaluar y dar tratamiento</strong> al formular el Plan de Preservación Digital a Largo Plazo.
+                    <button class="norma-chip ml-1" data-norma="aufa"><i data-lucide="quote" class="w-3 h-3"></i> art. 6.1.3.4 — enumeración literal</button>
+                </p>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="stagger text-center">
-                        <div class="relative inline-block mb-5">
-                            <div class="w-28 h-28 rounded-full border-2 border-red-500/30 flex items-center justify-center" style="animation: pulse-glow 2s infinite; --tw-shadow-color: rgba(239,68,68,0.2);">
-                                <span class="font-heading text-4xl font-light text-red-400 tracking-tighter">📄</span>
-                            </div>
-                        </div>
-                        <h3 class="font-heading font-medium text-sm mb-2">Documentos inencontrables</h3>
-                        <p class="text-xs text-neutral-500 leading-relaxed px-4">De las entidades sin sistema de gestión documental no logran ubicar documentos en menos de 15 minutos.</p>
-                    </div>
-                    <div class="stagger text-center">
-                        <div class="relative inline-block mb-5">
-                            <div class="w-28 h-28 rounded-full border-2 border-red-500/30 flex items-center justify-center" style="animation: pulse-glow 2s infinite 0.5s; --tw-shadow-color: rgba(239,68,68,0.2);">
-                                <span class="font-heading text-4xl font-light text-red-400 tracking-tighter">❌</span>
-                            </div>
-                        </div>
-                        <h3 class="font-heading font-medium text-sm mb-2">Pérdida por obsolescencia</h3>
-                        <p class="text-xs text-neutral-500 leading-relaxed px-4">De los documentos digitales creados hace 10 años están en formatos que ya no se pueden abrir correctamente.</p>
-                    </div>
-                    <div class="stagger text-center">
-                        <div class="relative inline-block mb-5">
-                            <div class="w-28 h-28 rounded-full border-2 border-red-500/30 flex items-center justify-center" style="animation: pulse-glow 2s infinite 1s; --tw-shadow-color: rgba(239,68,68,0.2);">
-                                <span class="font-heading text-4xl font-light text-red-400 tracking-tighter">🗃️</span>
-                            </div>
-                        </div>
-                        <h3 class="font-heading font-medium text-sm mb-2">Archivos en pendrives</h3>
-                        <p class="text-xs text-neutral-500 leading-relaxed px-4">De funcionarios aún guardan documentos institucionales en dispositivos personales sin respaldo ni seguridad.</p>
-                    </div>
-                </div>
+                <div id="riesgosNorma" class="stagger grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
 
-                <div class="stagger mt-10 bg-red-500/5 border border-red-500/10 rounded-xl p-5 flex items-start gap-4 max-w-3xl mx-auto">
-                    <i data-lucide="alert-octagon" class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0"></i>
-                    <div>
-                        <p class="text-sm text-red-300 font-medium mb-1">Dato clave</p>
-                        <p class="text-xs text-neutral-400 leading-relaxed">La implementación adecuada del SGDEA y las políticas de preservación digital reducen estos riesgos.</p>
+                <div class="stagger mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-[#239b48]/[0.06] border border-[#239b48]/20 rounded-xl p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-[#239b48]"></i>
+                            <p class="text-sm text-[#6ee7a0] font-medium">Qué sí podemos afirmar</p>
+                        </div>
+                        <p class="text-[0.72rem] text-neutral-400 leading-relaxed">
+                            Que la entidad está obligada a identificar estos ocho riesgos, documentar la estrategia elegida para mitigarlos y hacer seguimiento, control y evaluación de los planes del SIC.
+                        </p>
+                    </div>
+                    <div class="bg-amber-500/[0.06] border border-amber-500/20 rounded-xl p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
+                            <p class="text-sm text-amber-300 font-medium">Qué no debemos afirmar</p>
+                        </div>
+                        <p class="text-[0.72rem] text-neutral-400 leading-relaxed">
+                            Porcentajes de pérdida documental, tiempos de búsqueda o proporción de funcionarios con archivos en USB, salvo que provengan del diagnóstico integral de la propia entidad o de un estudio citable con autor y fecha.
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SLIDE 9: Uso Correcto del SGDEA -->
-        <section class="slide" data-slide="8">
-            <div class="max-w-5xl mx-auto w-full">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <div class="lg:col-span-5">
-                        <div class="stagger flex items-center gap-2 mb-4">
+        <!-- ============ SLIDE 9: Consecuencias del mal manejo ============ -->
+        <section class="slide" data-slide="8" data-title="Consecuencias del mal manejo documental" data-tema="Tema 3">
+            <div class="slide-inner max-w-5xl mx-auto w-full">
+                <div class="stagger flex items-center gap-2 mb-3">
+                    <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading font-semibold text-sm text-[#239b48]">03</div>
+                    <span class="text-xs font-mono tracking-widest uppercase text-neutral-500">Continuación</span>
+                </div>
+                <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-2">
+                    Consecuencias del mal manejo documental
+                </h2>
+                <p class="stagger text-neutral-400 text-sm font-light mb-6">
+                    Cuatro consecuencias reales. Haga clic en cada una para ver su correlato jurídico.
+                </p>
+
+                <div id="consecuencias" class="stagger grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </div>
+        </section>
+
+        <!-- ============ SLIDE 10: SGDEA checklist ============ -->
+        <section class="slide" data-slide="9" data-title="Uso correcto del SGDEA · checklist" data-tema="Tema 4">
+            <div class="slide-inner max-w-6xl mx-auto w-full">
+                <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] gap-8">
+                    <div>
+                        <div class="stagger flex items-center gap-2 mb-3">
                             <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading font-semibold text-sm text-[#239b48]">04</div>
                             <span class="text-xs font-mono tracking-widest uppercase text-neutral-500">Tema 4</span>
                         </div>
-                        <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-5 leading-tight">
-                            Uso Correcto del <span class="text-[#239b48]">SGDEA</span>
+                        <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-4 leading-tight">
+                            Uso Correcto del SGDEA
                         </h2>
-                        <p class="stagger text-neutral-400 font-light text-sm leading-relaxed mb-5">
-                            El <strong class="text-neutral-200">Sistema de Gestión Documental Electrónica de Archivo</strong> es la herramienta oficial para radicar, tramitar, firmar y archivar documentos de manera segura y trazable.
+                        <p class="stagger text-neutral-400 text-sm font-light leading-relaxed mb-4">
+                            El Sistema de Gestión de Documentos Electrónicos de Archivo es la herramienta oficial para radicar, tramitar, firmar y archivar documentos de manera segura y trazable.
                         </p>
-                        <p class="stagger text-neutral-500 text-xs leading-relaxed">
-                            Todo documento de la entidad debe pasar por el SGDEA. No se permite el uso de correos personales, WhatsApp o almacenamiento local como medio oficial de gestión.
-                        </p>
-                    </div>
-                    <div class="lg:col-span-7">
-                        <div class="space-y-3">
-                            <div class="stagger success-card card-hover bg-[#050505] border border-white/10 rounded-xl p-4 flex gap-3">
-                                <div class="w-8 h-8 rounded-lg bg-[#239b48]/10 flex items-center justify-center flex-shrink-0">
-                                    <span class="font-heading text-xs font-semibold text-[#239b48]">1</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-heading text-sm font-medium mb-0.5">Radicar correctamente</h4>
-                                    <p class="text-xs text-neutral-400">Completar todos los campos obligatorios: tipo documental, dependencia, asunto, anexos. Una radicación incompleta genera devoluciones y retrasos.</p>
-                                </div>
-                            </div>
-                            <div class="stagger success-card card-hover bg-[#050505] border border-white/10 rounded-xl p-4 flex gap-3">
-                                <div class="w-8 h-8 rounded-lg bg-[#239b48]/10 flex items-center justify-center flex-shrink-0">
-                                    <span class="font-heading text-xs font-semibold text-[#239b48]">2</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-heading text-sm font-medium mb-0.5">Clasificar con la TRD</h4>
-                                    <p class="text-xs text-neutral-400">Asignar la serie y subserie documental según la Tabla de Retención Documental. Esto define el tiempo de conservación y la disposición final.</p>
-                                </div>
-                            </div>
-                            <div class="stagger success-card card-hover bg-[#050505] border border-white/10 rounded-xl p-4 flex gap-3">
-                                <div class="w-8 h-8 rounded-lg bg-[#239b48]/10 flex items-center justify-center flex-shrink-0">
-                                    <span class="font-heading text-xs font-semibold text-[#239b48]">3</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-heading text-sm font-medium mb-0.5">Usar formatos permitidos</h4>
-                                    <p class="text-xs text-neutral-400">PDF/A para documentos finales, TIFF/JPEG para imágenes, ODT para documentos en elaboración. Evitar formatos propietarios cerrados.</p>
-                                </div>
-                            </div>
-                            <div class="stagger success-card card-hover bg-[#050505] border border-white/10 rounded-xl p-4 flex gap-3">
-                                <div class="w-8 h-8 rounded-lg bg-[#239b48]/10 flex items-center justify-center flex-shrink-0">
-                                    <span class="font-heading text-xs font-semibold text-[#239b48]">4</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-heading text-sm font-medium mb-0.5">Firmar electrónicamente</h4>
-                                    <p class="text-xs text-neutral-400">Utilizar la firma electrónica institucional para dar validez legal. La firma en papel debe ser la excepción, no la regla.</p>
-                                </div>
-                            </div>
-                            <div class="stagger success-card card-hover bg-[#050505] border border-white/10 rounded-xl p-4 flex gap-3">
-                                <div class="w-8 h-8 rounded-lg bg-[#239b48]/10 flex items-center justify-center flex-shrink-0">
-                                    <span class="font-heading text-xs font-semibold text-[#239b48]">5</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-heading text-sm font-medium mb-0.5">Gestionar expedientes</h4>
-                                    <p class="text-xs text-neutral-400">Agrupar documentos por expediente, mantener el orden chronological y no retirar documentos sin autorización del archivo.</p>
-                                </div>
+                        <div class="stagger bg-[#239b48]/[0.07] border border-[#239b48]/25 rounded-xl p-4 mb-4">
+                            <p class="text-xs text-neutral-300 leading-relaxed">
+                                Los sujetos obligados <strong>deben garantizar la implementación del SGDEA</strong> para la conformación y gestión de los expedientes electrónicos, atendiendo el ciclo vital de los documentos y de conformidad con los Cuadros de Clasificación Documental y las Tablas de Retención Documental.
+                            </p>
+                            <button class="norma-chip mt-2" data-norma="aufa"><i data-lucide="quote" class="w-3 h-3"></i> Acuerdo 001/2024 art. 1.3.4 — literal</button>
+                        </div>
+                        <div class="stagger bg-red-500/[0.06] border border-red-500/20 rounded-xl p-4">
+                            <p class="text-xs text-neutral-300 leading-relaxed mb-2">
+                                <strong class="text-red-300">Consecuencia práctica:</strong> si el expediente electrónico debe conformarse en el SGDEA, entonces correos personales, WhatsApp, unidades compartidas o almacenamiento local <strong>no son medios oficiales de gestión documental</strong>. Por ningún motivo el servidor público o contratista puede llevarse la documentación producida en ejercicio de sus funciones.
+                            </p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button class="norma-chip" data-norma="aufa">art. 1.3.3 par.</button>
+                                <button class="norma-chip" data-norma="ley1437">Ley 1437/2011 arts. 58-59</button>
                             </div>
                         </div>
+                    </div>
+
+                    <div>
+                        <div class="stagger flex items-center justify-between mb-3">
+                            <h3 class="font-heading font-medium text-sm text-neutral-300">Checklist de radicación correcta</h3>
+                            <span class="text-[0.62rem] font-heading text-neutral-500"><span id="checkCount">0</span> de 5 completados</span>
+                        </div>
+                        <div class="stagger h-[3px] bg-white/5 rounded-full mb-4 overflow-hidden">
+                            <div id="checkProgress" class="progress-fill h-full bg-gradient-to-r from-[#239b48] to-[#3ddb79] rounded-full" style="width:0%"></div>
+                        </div>
+                        <div id="sgdeaChecklist" class="stagger space-y-2.5"></div>
+                        <p class="stagger text-[0.62rem] text-neutral-600 mt-3 flex items-center gap-1.5">
+                            <i data-lucide="info" class="w-3 h-3"></i> Su progreso se guarda solo en este navegador.
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SLIDE 10: Cierre / Resumen -->
-        <section class="slide" data-slide="9">
-            <div class="max-w-4xl mx-auto text-center">
+        <!-- ============ SLIDE 11: Autoevaluación ============ -->
+        <section class="slide" data-slide="10" data-title="Autoevaluación" data-tema="Evaluación">
+            <div class="slide-inner max-w-3xl mx-auto w-full">
+                <div class="stagger flex items-center gap-2 mb-3">
+                    <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading font-semibold text-sm text-[#239b48]"><i data-lucide="help-circle" class="w-3.5 h-3.5"></i></div>
+                    <span class="text-xs font-mono tracking-widest uppercase text-neutral-500">Evaluación</span>
+                </div>
+                <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-2">Autoevaluación</h2>
+                <p class="stagger text-neutral-400 text-sm font-light mb-6">Seis preguntas. Cada respuesta muestra de inmediato el fundamento normativo.</p>
+
+                <div class="stagger flex items-center gap-3 mb-5">
+                    <div class="flex-1 h-[3px] bg-white/5 rounded-full overflow-hidden">
+                        <div id="quizProgress" class="progress-fill h-full bg-gradient-to-r from-[#239b48] to-[#3ddb79] rounded-full" style="width:0%"></div>
+                    </div>
+                    <span class="text-[0.65rem] font-heading text-neutral-500 whitespace-nowrap"><span id="quizIdx">1</span> / <span id="quizTotal">6</span></span>
+                    <span class="text-[0.65rem] font-heading text-[#239b48] whitespace-nowrap"><span id="quizScore">0</span> correctas</span>
+                </div>
+
+                <div id="quizBox" class="stagger"></div>
+            </div>
+        </section>
+
+        <!-- ============ SLIDE 12: Cierre ============ -->
+        <section class="slide" data-slide="11" data-title="Compromiso institucional" data-tema="Cierre">
+            <div class="slide-inner max-w-4xl mx-auto text-center">
                 <div class="stagger mb-6">
                     <div class="w-16 h-16 rounded-2xl bg-[#239b48]/10 border border-[#239b48]/20 flex items-center justify-center mx-auto mb-6" style="animation: float 3s ease-in-out infinite;">
                         <i data-lucide="check-circle-2" class="w-8 h-8 text-[#239b48]"></i>
@@ -719,60 +904,68 @@
                     Compromiso con la<br>
                     <span class="text-[#239b48]">Memoria Institucional</span>
                 </h2>
-                <p class="stagger text-neutral-400 font-light text-sm md:text-base max-w-2xl mx-auto mb-10 leading-relaxed">
+                <p class="stagger text-neutral-400 font-light text-sm md:text-base max-w-2xl mx-auto mb-9 leading-relaxed">
                     La preservación digital no es una tarea técnica aislada: es un compromiso de toda la institución. Cada documento que radicamos, clasificamos y conservamos correctamente es un acto de transparencia y responsabilidad con la ciudadanía.
                 </p>
 
-                <div class="stagger grid grid-cols-1 sm:grid-cols-4 gap-4 mb-10">
-                    <div class="bg-[#050505] border border-white/10 rounded-xl p-4">
+                <div class="stagger grid grid-cols-2 sm:grid-cols-4 gap-4 mb-9">
+                    <div class="card-hover bg-[#050505]/80 border border-white/10 rounded-xl p-4">
                         <i data-lucide="database" class="w-5 h-5 text-[#239b48] mx-auto mb-2"></i>
                         <p class="text-xs font-heading text-neutral-300">Preservar</p>
                     </div>
-                    <div class="bg-[#050505] border border-white/10 rounded-xl p-4">
+                    <div class="card-hover bg-[#050505]/80 border border-white/10 rounded-xl p-4">
                         <i data-lucide="shield-check" class="w-5 h-5 text-[#239b48] mx-auto mb-2"></i>
                         <p class="text-xs font-heading text-neutral-300">Responsabilizarse</p>
                     </div>
-                    <div class="bg-[#050505] border border-white/10 rounded-xl p-4">
+                    <div class="card-hover bg-[#050505]/80 border border-white/10 rounded-xl p-4">
                         <i data-lucide="alert-triangle" class="w-5 h-5 text-[#239b48] mx-auto mb-2"></i>
                         <p class="text-xs font-heading text-neutral-300">Prevenir riesgos</p>
                     </div>
-                    <div class="bg-[#050505] border border-white/10 rounded-xl p-4">
+                    <div class="card-hover bg-[#050505]/80 border border-white/10 rounded-xl p-4">
                         <i data-lucide="monitor-check" class="w-5 h-5 text-[#239b48] mx-auto mb-2"></i>
-                        <p class="text-xs font-heading text-neutral-300">Usar el SGDEA</p>
+                        <p class="text-xs font-heading text-neutral-300">Usar los sistemas institucionales</p>
                     </div>
                 </div>
 
                 <div class="stagger flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <button onclick="goToSlide(0)" class="shimmer-btn bg-[#239b48] text-black font-heading font-medium text-sm tracking-wide px-8 py-3.5 rounded-full hover:scale-105 transition-transform duration-300" style="box-shadow: 0 0 20px rgba(35,155,72,0.6);">
+                    <button onclick="goToSlide(12)" class="shimmer-btn bg-[#239b48] text-black font-heading font-medium text-sm tracking-wide px-8 py-3.5 rounded-full hover:scale-105 transition-transform duration-300" style="box-shadow: 0 0 20px rgba(35,155,72,0.6);">
+                        Ver fuentes normativas
+                    </button>
+                    <button onclick="goToSlide(0)" class="font-heading font-medium text-sm tracking-wide px-7 py-3.5 rounded-full border border-white/15 text-neutral-300 hover:border-[#239b48]/60 hover:text-white transition-all">
                         Volver al inicio
                     </button>
-                    <span class="text-neutral-500 text-xs">Gracias por su atención</span>
                 </div>
+            </div>
+        </section>
+
+        <!-- ============ SLIDE 13: Fuentes ============ -->
+        <section class="slide" data-slide="12" data-title="Fuentes normativas" data-tema="Normativa">
+            <div class="slide-inner max-w-5xl mx-auto w-full">
+                <div class="stagger flex items-center gap-2 mb-3">
+                    <div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading font-semibold text-sm text-[#239b48]"><i data-lucide="library" class="w-3.5 h-3.5"></i></div>
+                    <span class="text-xs font-mono tracking-widest uppercase text-neutral-500">Referencias</span>
+                </div>
+                <h2 class="stagger font-heading font-medium text-3xl md:text-4xl tracking-tight mb-2">Fuentes normativas citables</h2>
+                <p class="stagger text-neutral-400 text-sm font-light mb-6">
+                    Toda afirmación de esta presentación se sostiene en una de estas normas. Haga clic en cualquiera para ver los artículos y el enlace oficial.
+                </p>
+                <div id="fuentesGrid" class="stagger grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                <p class="stagger text-[0.65rem] text-neutral-600 mt-5 leading-relaxed">
+                    Consulta recomendada: Archivo General de la Nación Jorge Palacios Preciado — <span class="text-neutral-500">normativa.archivogeneral.gov.co</span>. Las normas se citan por número de artículo; los enlaces apuntan a la fuente oficial publicada.
+                </p>
             </div>
         </section>
 
     </main>
 
     <!-- Navigation Controls -->
-    <div class="fixed bottom-0 left-0 right-0 z-30 px-6 py-4 flex items-center justify-between" style="backdrop-filter: blur(4px); background: rgba(9,29,48,0.6);">
+    <div class="fixed bottom-0 left-0 right-0 z-30 px-4 md:px-6 py-3.5 flex items-center justify-between gap-4" style="backdrop-filter: blur(4px); background: rgba(9,29,48,0.75);">
         <button id="prevBtn" onclick="prevSlide()" class="flex items-center gap-2 text-sm text-neutral-400 hover:text-white transition-colors duration-300 disabled:opacity-20 disabled:cursor-not-allowed" disabled>
             <i data-lucide="arrow-left" class="w-4 h-4"></i>
             <span class="hidden sm:inline font-heading text-xs tracking-wide">Anterior</span>
         </button>
 
-        <!-- Dot indicators -->
-        <div id="dotsContainer" class="flex items-center gap-2">
-            <button class="dot active w-2 h-2 rounded-full bg-neutral-600" data-dot="0" onclick="goToSlide(0)"></button>
-            <button class="dot w-2 h-2 rounded-full bg-neutral-600" data-dot="1" onclick="goToSlide(1)"></button>
-            <button class="dot w-2 h-2 rounded-full bg-neutral-600" data-dot="2" onclick="goToSlide(2)"></button>
-            <button class="dot w-2 h-2 rounded-full bg-neutral-600" data-dot="3" onclick="goToSlide(3)"></button>
-            <button class="dot w-2 h-2 rounded-full bg-neutral-600" data-dot="4" onclick="goToSlide(4)"></button>
-            <button class="dot w-2 h-2 rounded-full bg-neutral-600" data-dot="5" onclick="goToSlide(5)"></button>
-            <button class="dot w-2 h-2 rounded-full bg-neutral-600" data-dot="6" onclick="goToSlide(6)"></button>
-            <button class="dot w-2 h-2 rounded-full bg-neutral-600" data-dot="7" onclick="goToSlide(7)"></button>
-            <button class="dot w-2 h-2 rounded-full bg-neutral-600" data-dot="8" onclick="goToSlide(8)"></button>
-            <button class="dot w-2 h-2 rounded-full bg-neutral-600" data-dot="9" onclick="goToSlide(9)"></button>
-        </div>
+        <div id="dotsContainer" class="flex items-center gap-1.5 md:gap-2"></div>
 
         <button id="nextBtn" onclick="nextSlide()" class="flex items-center gap-2 text-sm text-neutral-400 hover:text-white transition-colors duration-300 disabled:opacity-20 disabled:cursor-not-allowed">
             <span class="hidden sm:inline font-heading text-xs tracking-wide">Siguiente</span>
@@ -780,107 +973,910 @@
         </button>
     </div>
 
+    <!-- ============ OVERLAY: Ficha de norma ============ -->
+    <div id="normaOverlay" class="overlay" onclick="if(event.target===this) closeOverlays()">
+        <div class="overlay-panel p-6 md:p-8">
+            <div class="flex items-start justify-between gap-4 mb-5">
+                <div>
+                    <p id="normaKicker" class="text-[0.65rem] font-mono tracking-widest uppercase text-[#239b48] mb-1.5"></p>
+                    <h3 id="normaTitle" class="font-heading font-medium text-xl md:text-2xl tracking-tight leading-tight"></h3>
+                    <p id="normaSubtitle" class="text-xs text-neutral-500 mt-1.5"></p>
+                </div>
+                <button onclick="closeOverlays()" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div id="normaBody"></div>
+        </div>
+    </div>
+
+    <!-- ============ OVERLAY: Índice ============ -->
+    <div id="indexOverlay" class="overlay" onclick="if(event.target===this) closeOverlays()">
+        <div class="overlay-panel p-6 md:p-8" style="max-width: 54rem;">
+            <div class="flex items-start justify-between gap-4 mb-5">
+                <div>
+                    <p class="text-[0.65rem] font-mono tracking-widest uppercase text-[#239b48] mb-1.5">Navegación</p>
+                    <h3 class="font-heading font-medium text-xl tracking-tight">Índice de la presentación</h3>
+                </div>
+                <button onclick="closeOverlays()" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div id="indexGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+        </div>
+    </div>
+
+    <!-- ============ OVERLAY: Ayuda ============ -->
+    <div id="helpOverlay" class="overlay" onclick="if(event.target===this) closeOverlays()">
+        <div class="overlay-panel p-6 md:p-8" style="max-width: 32rem;">
+            <div class="flex items-start justify-between gap-4 mb-5">
+                <div>
+                    <p class="text-[0.65rem] font-mono tracking-widest uppercase text-[#239b48] mb-1.5">Ayuda</p>
+                    <h3 class="font-heading font-medium text-xl tracking-tight">Atajos de teclado</h3>
+                </div>
+                <button onclick="closeOverlays()" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="space-y-2.5 text-sm">
+                <div class="flex items-center justify-between py-2 border-b border-white/5"><span class="text-neutral-400">Siguiente diapositiva</span><span><span class="kbd">→</span> <span class="kbd">↓</span> <span class="kbd">Espacio</span></span></div>
+                <div class="flex items-center justify-between py-2 border-b border-white/5"><span class="text-neutral-400">Diapositiva anterior</span><span><span class="kbd">←</span> <span class="kbd">↑</span></span></div>
+                <div class="flex items-center justify-between py-2 border-b border-white/5"><span class="text-neutral-400">Primera / última</span><span><span class="kbd">Inicio</span> <span class="kbd">Fin</span></span></div>
+                <div class="flex items-center justify-between py-2 border-b border-white/5"><span class="text-neutral-400">Índice de diapositivas</span><span class="kbd">M</span></div>
+                <div class="flex items-center justify-between py-2 border-b border-white/5"><span class="text-neutral-400">Fuentes normativas</span><span class="kbd">N</span></div>
+                <div class="flex items-center justify-between py-2 border-b border-white/5"><span class="text-neutral-400">Pantalla completa</span><span class="kbd">F</span></div>
+                <div class="flex items-center justify-between py-2 border-b border-white/5"><span class="text-neutral-400">Ir a diapositiva n.º</span><span><span class="kbd">1</span> … <span class="kbd">9</span></span></div>
+                <div class="flex items-center justify-between py-2"><span class="text-neutral-400">Cerrar ventanas</span><span class="kbd">Esc</span></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
+    /* =========================================================
+       REGISTRO NORMATIVO
+       Cada entrada sostiene afirmaciones concretas de la
+       presentación. Los textos entre comillas son literales.
+       ========================================================= */
+    const NORMAS = {
+        aufa: {
+            kicker: 'Norma principal · VIGENTE',
+            title: 'Acuerdo 001 de 2024 — Archivo General de la Nación',
+            subtitle: '29 de febrero de 2024 · "Acuerdo Único de la Función Archivística" (AUFA). Rige desde su expedición; los sujetos obligados tuvieron 6 meses para adoptarlo (art. 10.2, par. 1).',
+            url: 'https://normativa.archivogeneral.gov.co/wp-content/uploads/2024/04/2024-02_29_AcuerdoAGN-FIRMADO.pdf',
+            arts: [
+                ['Art. 1.1.2 — Ámbito de aplicación', 'Comprende a la administración pública en sus niveles nacional, departamental, distrital y municipal, las entidades privadas que cumplen funciones públicas y los demás organismos regulados por la Ley 594 de 2000. El término "sujetos obligados" incluye servidores públicos, trabajadores oficiales y particulares que cumplen función pública.'],
+                ['Art. 1.3.1 — Responsabilidades', 'Representantes legales, secretarios generales, funcionarios de igual o superior jerarquía y jefes de oficina deben velar por el cumplimiento y seguimiento de la normatividad archivística.'],
+                ['Art. 1.3.2 — Recibo y entrega de documentos', 'Todo servidor público al ser vinculado, trasladado o desvinculado recibirá o entregará los documentos mediante inventarios documentales conforme al Cuadro de Clasificación Documental, usando el Formato Único de Inventario Documental (FUID).'],
+                ['Art. 1.3.3 — Omisión en la recepción, gestión y entrega', 'Quienes omitan la entrega, la debida gestión y el recibo de los documentos "responderán ante las autoridades disciplinarias, penales, fiscales o administrativas". Parágrafo: por ningún motivo el servidor o contratista podrá llevarse la documentación producida en ejercicio de sus funciones, "por cuanto los documentos públicos son de propiedad del Estado".'],
+                ['Art. 1.3.4 — Conformación y acceso de los archivos', 'Los sujetos obligados "deben garantizar la implementación del Sistema de Gestión de Documentos Electrónicos de Archivo para la conformación y gestión de los expedientes electrónicos", atendiendo el ciclo vital y de conformidad con los CCD y las TRD.'],
+                ['Art. 4.3.2.2 — Elementos del expediente electrónico', 'Mínimo: documentos electrónicos de archivo, índice electrónico, firma del índice electrónico y metadatos de contenido, estructura y contexto, conservados y actualizados durante el ciclo de vida.'],
+                ['Art. 4.3.2.3 — Índice electrónico', 'Debe identificar la totalidad de documentos del expediente, asegurar su secuencia y orden original, garantizar la integridad durante todo el ciclo de vida y actualizarse automáticamente con cada incorporación.'],
+                ['Art. 4.3.2.6 — Preservación del expediente electrónico', 'La preservación a largo plazo aplica al documento electrónico de archivo "en cualquier etapa del ciclo vital", manteniendo autenticidad, integridad, inalterabilidad, fiabilidad y disponibilidad.'],
+                ['Art. 6.1.1.1 — Propósito del SIC', 'Garantizar la conservación y preservación de cualquier tipo de información, independientemente del medio o tecnología, manteniendo atributos como integridad, autenticidad, fiabilidad y accesibilidad, desde la producción hasta la disposición final.'],
+                ['Art. 6.1.1.2 — Componentes del SIC', 'El Sistema Integrado de Conservación se compone del Plan de Conservación Documental (soportes físicos o analógicos) y del Plan de Preservación Digital a Largo Plazo (documentos digitales o electrónicos). Parágrafo: el diagnóstico integral de gestión documental es requisito para formular ambos planes.'],
+                ['Art. 6.1.3.1 — Responsabilidad sobre la preservación', 'Los sujetos obligados son responsables de la preservación a largo plazo de documentos, datos, metadatos y expedientes electrónicos, "independientemente del sistema informático que los generó, tramitó, o en el cual se almacenan".'],
+                ['Art. 6.1.3.2 — Formulación del Plan de Preservación Digital a Largo Plazo', 'Conjunto de acciones a corto, mediano y largo plazo para asegurar la preservación de los documentos electrónicos de archivo manteniendo autenticidad, integridad, confidencialidad, inalterabilidad, fiabilidad, interpretación, comprensión y disponibilidad en el tiempo. Debe hacer parte del SIC.'],
+                ['Art. 6.1.3.4 — Riesgos para la preservación digital', 'Riesgos mínimos a evaluar y tratar: (1) obsolescencia y degradación del soporte físico; (2) obsolescencia del formato digital; (3) obsolescencia del software; (4) obsolescencia del hardware; (5) desastres naturales; (6) ataques deliberados a la información; (7) fallas organizacionales; (8) errores humanos.'],
+                ['Art. 6.1.3.5 — Estrategias de preservación', 'Migración, conversión, emulación y refreshing. La estrategia elegida debe estar soportada, documentada y justificada, con registro histórico de acciones, vigilancia de desarrollos técnicos y esquema de metadatos definido.'],
+                ['Art. 7.1.2 — Disponibilidad y accesibilidad', 'Los documentos electrónicos y sus metadatos se mantendrán disponibles conforme a la Ley 1712 de 2014, garantizando autenticidad, fiabilidad e integridad a lo largo del ciclo vital. Parágrafo: "los documentos electrónicos se dispondrán en formatos abiertos, libres y accesibles que permitan su correcta representación".'],
+                ['Art. 10.1 — Derogatoria', 'Deroga, entre otros, los Acuerdos 005 de 2013, 002 de 2014, 006 de 2014, 007 de 2014, 008 de 2014, 003 de 2015, 004 de 2015, 006 de 2015 y 004 de 2019.'],
+                ['Anexo 1 — Definición de preservación digital', '"Es el conjunto de principios, políticas, estrategias y acciones específicas que tienen como fin asegurar la estabilidad física y tecnológica de los datos, la permanencia y el acceso de la información de los documentos digitales y proteger el contenido intelectual de los mismos por el tiempo que se considere necesario."']
+            ]
+        },
+        ley594: {
+            kicker: 'Ley marco · VIGENTE',
+            title: 'Ley 594 de 2000 — Ley General de Archivos',
+            subtitle: 'Norma de rango legal que funda la obligación archivística del Estado colombiano.',
+            url: 'https://normativa.archivogeneral.gov.co/ley-594-de-2000/',
+            arts: [
+                ['Art. 2 — Ámbito de aplicación', '"La presente ley comprende a la administración pública en sus diferentes niveles, las entidades privadas que cumplen funciones públicas y los demás organismos regulados por la presente ley."'],
+                ['Art. 11 — Obligatoriedad de la conformación de los archivos públicos', '"El Estado está obligado a la creación, organización, preservación y control de los archivos", atendiendo los principios de procedencia y orden original, el ciclo vital de los documentos y la normatividad archivística.'],
+                ['Art. 19 — Soporte documental', 'Las entidades del Estado podrán incorporar tecnologías de avanzada en la administración y conservación de sus archivos, empleando cualquier medio técnico, electrónico, informático, óptico o telemático, cumpliendo requisitos de organización archivística y estudios técnicos previos.'],
+                ['Art. 21 — Programas de gestión documental', '"Las entidades públicas deberán elaborar programas de gestión de documentos", pudiendo contemplar el uso de nuevas tecnologías y soportes.'],
+                ['Art. 24 — Obligatoriedad de las tablas de retención', '"Será obligatorio para las entidades del Estado elaborar y adoptar las respectivas tablas de retención documental."'],
+                ['Art. 35 — Prevención y sanción', 'Faculta al Gobierno Nacional y a las entidades territoriales para prevenir y sancionar el incumplimiento de la normativa archivística mediante órdenes y multas sucesivas.'],
+                ['Art. 46 — Conservación de documentos', '"Los archivos de la Administración Pública deberán implementar un sistema integrado de conservación en cada una de las fases del ciclo vital de los documentos."'],
+                ['Art. 47 — Calidad de los soportes', 'Los documentos de archivo, originales o copias, deberán elaborarse en soportes de comprobada durabilidad y calidad, de acuerdo con normas nacionales o internacionales.'],
+                ['Art. 48 — Conservación en nuevos soportes', 'El Archivo General de la Nación dará pautas y normas técnicas generales sobre conservación de archivos, incluyendo los documentos en nuevos soportes.']
+            ]
+        },
+        ley527: {
+            kicker: 'Ley · VIGENTE · úsese con precisión',
+            title: 'Ley 527 de 1999 — Mensajes de datos y firmas digitales',
+            subtitle: 'Define y reglamenta el acceso y uso de los mensajes de datos, el comercio electrónico y las firmas digitales.',
+            url: 'https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=4276',
+            aviso: 'Esta ley NO es la fuente de la obligación archivística de las entidades públicas. Regula el valor jurídico y probatorio de los mensajes de datos. Si se necesita fundamentar el deber de conservar documentos públicos digitales, cítese la Ley 594 de 2000 (arts. 11, 19 y 46) y el Acuerdo 001 de 2024 del AGN.',
+            arts: [
+                ['Art. 10 — Admisibilidad y fuerza probatoria', 'Los mensajes de datos serán admisibles como medios de prueba y su fuerza probatoria es la de los documentos, conforme a las reglas de la sana crítica.'],
+                ['Art. 12 — Conservación de los mensajes de datos y documentos', 'Cuando la ley requiera que ciertos documentos se conserven, el requisito se cumple si: (1) la información es accesible para consulta posterior; (2) el mensaje se conserva en el formato en que se generó, envió o recibió, o en uno que permita demostrar que reproduce con exactitud la información; (3) se conserva toda la información que permita determinar origen, destino, fecha y hora del envío o recepción.'],
+                ['Art. 7 — Firma', 'Requisitos para que un mensaje de datos satisfaga el requerimiento legal de firma: método que identifique al iniciador e indique su aprobación, y que sea confiable y apropiado para el propósito del mensaje.']
+            ]
+        },
+        ley1712: {
+            kicker: 'Ley · VIGENTE',
+            title: 'Ley 1712 de 2014 — Transparencia y acceso a la información pública',
+            subtitle: 'Ley de Transparencia y del Derecho de Acceso a la Información Pública Nacional.',
+            url: 'https://normativa.archivogeneral.gov.co/ley-1712-de-2014/',
+            arts: [
+                ['Art. 15 — Programa de Gestión Documental', 'Los sujetos obligados deberán adoptar un Programa de Gestión Documental "en el cual se establezcan los procedimientos y lineamientos necesarios para la producción, distribución, organización, consulta y conservación de los documentos públicos".'],
+                ['Art. 16 — Archivos', 'Los sujetos obligados "deben asegurarse de que existan dentro de sus entidades procedimientos claros para la creación, gestión, organización y conservación de sus archivos".'],
+                ['Art. 17 — Sistemas de información', 'Los sujetos obligados deben asegurar que los sistemas de información electrónica "se encuentren alineados con los distintos procedimientos y articulados con los lineamientos establecidos en el Programa de Gestión Documental de la entidad".']
+            ]
+        },
+        dec1080: {
+            kicker: 'Decreto reglamentario · VIGENTE',
+            title: 'Decreto 1080 de 2015 — Decreto Único Reglamentario del Sector Cultura',
+            subtitle: 'Compila la reglamentación de la gestión documental (antes Decreto 2609 de 2012). Parte 8 del Libro 2.',
+            url: 'https://normativa.archivogeneral.gov.co/decreto-1080-de-2015/',
+            arts: [
+                ['Art. 2.8.2.5.8 — Instrumentos archivísticos', 'La gestión documental en las entidades públicas se desarrolla con base en: Cuadro de Clasificación Documental (CCD), Tabla de Retención Documental (TRD), Programa de Gestión Documental (PGD), Plan Institucional de Archivos (PINAR), inventario documental, modelo de requisitos para la gestión de documentos electrónicos, bancos terminológicos, mapas de procesos y tablas de control de acceso.'],
+                ['Arts. 2.8.7.2.3 y 2.8.7.2.4 — Diagnóstico integral', 'Referenciados por el Acuerdo 001 de 2024 como base del diagnóstico integral de gestión documental y administración de archivos.'],
+                ['Art. 2.8.2.2.4 — Documentos derivados de contratos', 'Fundamento para exigir en las minutas contractuales la entrega de los documentos de archivo producidos en ejecución del contrato.']
+            ]
+        },
+        ley1437: {
+            kicker: 'Ley · VIGENTE (modificada por Ley 2080 de 2021)',
+            title: 'Ley 1437 de 2011 — CPACA, Capítulo IV: medios electrónicos',
+            subtitle: 'Código de Procedimiento Administrativo y de lo Contencioso Administrativo.',
+            url: 'https://normativa.archivogeneral.gov.co/ley-1437-de-2011/',
+            arts: [
+                ['Art. 58 — Archivo electrónico de documentos', 'Cuando el procedimiento administrativo se adelante por medios electrónicos, los documentos deben archivarse en ese mismo medio. La conservación de los actos administrativos electrónicos debe asegurar la autenticidad e integridad de la información necesaria para reproducirlos y registrar las fechas de expedición, notificación y archivo.'],
+                ['Art. 59 — Expediente electrónico', 'Conjunto de documentos electrónicos correspondientes a un procedimiento administrativo, cualquiera que sea la información que contengan. El expediente electrónico debe garantizar condiciones de autenticidad, integridad y disponibilidad. (Modificado por el art. 11 de la Ley 2080 de 2021.)'],
+                ['Art. 55 — Documento público en medio electrónico', 'Reconoce la validez del documento público producido o conservado en medio electrónico.']
+            ]
+        },
+        ley1581: {
+            kicker: 'Ley · VIGENTE',
+            title: 'Ley 1581 de 2012 — Protección de datos personales',
+            subtitle: 'Régimen general de protección de datos personales. Pertinente cuando el documento de archivo contiene datos personales o sensibles.',
+            url: 'https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=49981',
+            arts: [
+                ['Art. 4 — Principios', 'Entre ellos los principios de seguridad y confidencialidad: la información debe manejarse con las medidas técnicas, humanas y administrativas necesarias para evitar su adulteración, pérdida, consulta, uso o acceso no autorizado.'],
+                ['Art. 17 — Deberes de los responsables', 'Adoptar medidas de seguridad e informar a la autoridad cuando se presenten violaciones a los códigos de seguridad o riesgos en la administración de la información.'],
+                ['Aplicación práctica', 'Guardar documentos institucionales con datos personales en equipos personales, correos privados o medios extraíbles sin cifrado expone a la entidad frente a esta ley, además de la normativa archivística.']
+            ]
+        },
+        ley1273: {
+            kicker: 'Ley penal · VIGENTE',
+            title: 'Ley 1273 de 2009 — Delitos informáticos',
+            subtitle: 'Crea el bien jurídico "de la protección de la información y de los datos" en el Código Penal.',
+            url: 'https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=34492',
+            arts: [
+                ['Art. 269A — Acceso abusivo a un sistema informático', 'Tipifica el acceso sin autorización a un sistema informático protegido o no con medida de seguridad.'],
+                ['Art. 269D — Daño informático', 'Tipifica destruir, dañar, borrar, deteriorar, alterar o suprimir datos informáticos sin estar facultado para ello.'],
+                ['Art. 269E / 269F', 'Uso de software malicioso y violación de datos personales.'],
+                ['Nota de uso', 'Cítese junto con el art. 292 del Código Penal (destrucción, supresión u ocultamiento de documento público) cuando se hable de consecuencias penales por pérdida o alteración de documentos públicos.']
+            ]
+        },
+        disciplinario: {
+            kicker: 'Régimen disciplinario y penal',
+            title: 'Responsabilidad del servidor público',
+            subtitle: 'Fundamentos para afirmar que el mal manejo documental genera responsabilidad personal.',
+            url: 'https://normativa.archivogeneral.gov.co/',
+            arts: [
+                ['Acuerdo 001 de 2024, art. 1.3.3', 'Es la cita más directa y específica: quienes omitan la entrega, gestión y recibo de documentos "responderán ante las autoridades disciplinarias, penales, fiscales o administrativas por las consecuencias de esta omisión".'],
+                ['Ley 1952 de 2019 — Código General Disciplinario', 'Establece los deberes del servidor público, entre ellos custodiar y cuidar la documentación e información que por razón de su empleo tenga bajo su cuidado, e impedir su uso indebido, sustracción, destrucción u ocultamiento.'],
+                ['Código Penal, art. 292 — Destrucción, supresión u oculta­miento de documento público', 'Sanciona a quien destruya, suprima u oculte total o parcialmente un documento público; la pena se agrava si el responsable es servidor público.'],
+                ['Ley 594 de 2000, art. 35', 'Habilita la prevención y sanción administrativa por incumplimiento de la normativa archivística.']
+            ]
+        },
+        iso: {
+            kicker: 'Estándares técnicos · no son norma legal',
+            title: 'Normas técnicas de referencia',
+            subtitle: 'El Acuerdo 001 de 2024 remite a "normas técnicas y estándares internacionales vigentes" sin nombrarlos uno a uno. Estas son las referencias usuales; cítense como estándar técnico, nunca como obligación legal directa.',
+            url: 'https://www.archivogeneral.gov.co/',
+            arts: [
+                ['ISO 14721 (modelo OAIS)', 'Modelo de referencia para un Sistema Abierto de Información de Archivo. Es la base conceptual de los planes de preservación digital a largo plazo.'],
+                ['ISO 16363', 'Auditoría y certificación de repositorios digitales confiables.'],
+                ['ISO 15489 / ISO 30301', 'Gestión de documentos y sistemas de gestión para los registros.'],
+                ['ISO 19005 (PDF/A)', 'Formato de archivo de larga duración basado en PDF. Es la razón técnica para preferir PDF/A, pero el Acuerdo 001 de 2024 solo exige "formatos abiertos, libres y accesibles" (art. 7.1.2, par.), sin nombrar PDF/A. Si la entidad quiere obligar PDF/A debe fijarlo en su Programa de Gestión Documental.'],
+                ['ISO 13008', 'Conversión y migración de documentos electrónicos.']
+            ]
+        },
+        derogados: {
+            kicker: 'Atención · NORMAS DEROGADAS',
+            title: 'Acuerdos derogados por el Acuerdo 001 de 2024',
+            subtitle: 'Art. 10.1. Con fundamento en el art. 3 de la Ley 153 de 1887, "por existir una nueva reglamentación que regula íntegramente la función archivística del Estado".',
+            url: 'https://normativa.archivogeneral.gov.co/wp-content/uploads/2024/04/2024-02_29_AcuerdoAGN-FIRMADO.pdf',
+            aviso: 'Si algún documento interno de la entidad (política, plan, manual o procedimiento) todavía cita estos acuerdos como fundamento jurídico, debe actualizarse al Acuerdo 001 de 2024.',
+            arts: [
+                ['Los más citados en gestión documental', 'Acuerdo 006 de 2014 (Sistema Integrado de Conservación) · Acuerdo 003 de 2015 (gestión de documentos electrónicos) · Acuerdo 002 de 2014 (expedientes de archivo) · Acuerdo 005 de 2013 (organización de archivos de gestión) · Acuerdo 008 de 2014 (custodia y depósito) · Acuerdo 004 de 2019 (trámite de TRD y TVD).'],
+                ['Lista completa del art. 10.1', 'Acuerdos 007 de 1994; 011 de 1996; 047, 049 y 056 de 2000; 060 de 2001; 038 y 042 de 2002; 002 de 2004; 027 de 2006; 006 de 2011; 007 de 2012; 005 de 2013; 002, 006, 007 y 008 de 2014; 003, 004 y 006 de 2015; 003, 005, 008, 009 y 010 de 2018; 001, 002, 004 y 006 de 2019; 001 de 2020; 002 de 2021; "y demás actos administrativos que le sean contrarios".'],
+                ['Parágrafo — efectos', 'Los actos administrativos expedidos con fundamento en las disposiciones derogadas "mantendrán su vigencia y ejecutoriedad, teniendo en cuenta que los fundamentos jurídicos permanecen vigentes en el presente Acuerdo".']
+            ]
+        }
+    };
 
-        // Slide logic
-        let currentSlide = 0;
-        const totalSlides = 10;
-        const slides = document.querySelectorAll('.slide');
-        const dots = document.querySelectorAll('.dot');
-        const progressBar = document.getElementById('progressBar');
-        const slideCounter = document.getElementById('slideCounter');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
+    /* ===================== CONCEPTOS (flip cards) ===================== */
+    const CONCEPTOS = [
+        { t:'Autenticidad',  d:'El documento es lo que dice ser.',                 n:'Acuerdo 001/2024 arts. 6.1.1.1 y 6.1.3.1', k:'aufa', icon:'badge-check' },
+        { t:'Integridad',    d:'No ha sido alterado sin autorización.',            n:'Acuerdo 001/2024 art. 4.3.2.3 num. 3', k:'aufa', icon:'lock' },
+        { t:'Fiabilidad',    d:'Es un registro completo y preciso.',               n:'Acuerdo 001/2024 art. 6.1.3.2', k:'aufa', icon:'file-check' },
+        { t:'Disponibilidad',d:'Puede ser consultado en cualquier momento.',       n:'Acuerdo 001/2024 art. 7.1.2 · Ley 1712/2014 art. 16', k:'ley1712', icon:'search' }
+    ];
 
-        function updateUI() {
-            // Update slides
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active', 'exit-left');
-                if (i === currentSlide) {
-                    slide.classList.add('active');
-                } else if (i < currentSlide) {
-                    slide.classList.add('exit-left');
+    /* ===================== TIMELINE NORMATIVO ===================== */
+    const TIMELINE = [
+        { año:'1999', norma:'Ley 527', k:'ley527', label:'Mensajes de datos y firmas digitales', sostiene:'El valor jurídico y probatorio del documento electrónico y los requisitos de conservación de mensajes de datos (art. 12).', ojo:'No es la fuente del deber archivístico de las entidades públicas.' },
+        { año:'2000', norma:'Ley 594', k:'ley594', label:'Ley General de Archivos', sostiene:'La obligación del Estado de crear, organizar, preservar y controlar archivos (art. 11), el Sistema Integrado de Conservación (art. 46), el Programa de Gestión Documental (art. 21) y la obligatoriedad de las TRD (art. 24).' },
+        { año:'2011', norma:'Ley 1437', k:'ley1437', label:'CPACA — medios electrónicos', sostiene:'El expediente electrónico como figura del procedimiento administrativo (art. 59) y el archivo electrónico de documentos (art. 58).' },
+        { año:'2012', norma:'Ley 1581', k:'ley1581', label:'Protección de datos personales', sostiene:'El deber de seguridad y confidencialidad cuando el documento contiene datos personales.' },
+        { año:'2014', norma:'Ley 1712', k:'ley1712', label:'Transparencia y acceso a la información', sostiene:'La obligación de adoptar un Programa de Gestión Documental (art. 15), de tener procedimientos claros de archivo (art. 16) y de alinear los sistemas de información con el PGD (art. 17).' },
+        { año:'2015', norma:'Decreto 1080', k:'dec1080', label:'Decreto Único del Sector Cultura', sostiene:'Los instrumentos archivísticos obligatorios: CCD, TRD, PGD, PINAR, inventario documental y modelo de requisitos para documentos electrónicos (art. 2.8.2.5.8).' },
+        { año:'2024', norma:'Acuerdo 001', k:'aufa', label:'Acuerdo Único de la Función Archivística', sostiene:'Prácticamente toda la parte técnica de esta presentación: definición de preservación digital, componentes del SIC, los 8 riesgos, las 4 estrategias, la obligación de SGDEA y la responsabilidad personal del servidor público.', destacado:true },
+        { año:'2024', norma:'Derogatorias', k:'derogados', label:'Acuerdos 006/2014 y 003/2015, entre otros', sostiene:'Advertencia de vigencia: los acuerdos que tradicionalmente se citaban en materia de conservación y documentos electrónicos ya no están vigentes.', derogada:true }
+    ];
+
+    /* ===================== RESPONSABILIDADES ===================== */
+    const RESPONSABILIDADES = [
+        {
+            icon:'crown', titulo:'Alta Dirección',
+            resumen:'Asignar recursos, aprobar políticas y garantizar el compromiso institucional.',
+            detalle:'Representantes legales, secretarios generales, funcionarios de igual o superior jerarquía y jefes de oficina tienen la responsabilidad de velar por el cumplimiento y seguimiento de las disposiciones de la normatividad archivística. Les corresponde aprobar la Política Institucional de Gestión Documental y los planes del Sistema Integrado de Conservación, y asegurar los recursos para su implementación.',
+            citas:[['aufa','Acuerdo 001/2024 art. 1.3.1'],['aufa','art. 6.1.1.3 y 6.1.1.7'],['ley1712','Ley 1712/2014 art. 15']]
+        },
+        {
+            icon:'folder-tree', titulo:'Oficina de Gestión Documental / Archivo',
+            resumen:'Instrumentos archivísticos, clasificación, valoración y calidad de los procesos.',
+            detalle:'Elaborar y mantener los instrumentos archivísticos (CCD, TRD, PGD, PINAR, inventario documental, modelo de requisitos para documentos electrónicos), formular el Plan de Preservación Digital a Largo Plazo como parte del SIC, coordinar el diagnóstico integral de gestión documental y hacer seguimiento, control y evaluación de los planes.',
+            citas:[['dec1080','Decreto 1080/2015 art. 2.8.2.5.8'],['aufa','Acuerdo 001/2024 arts. 6.1.1.2, 6.1.1.3 y 6.1.3.2'],['ley594','Ley 594/2000 arts. 21 y 24']]
+        },
+        {
+            icon:'server-cog', titulo:'Área de Tecnología (TI)',
+            resumen:'Infraestructura, respaldos, SGDEA y disponibilidad de las plataformas.',
+            detalle:'Mantener la infraestructura y los repositorios, ejecutar las estrategias técnicas de preservación (migración, conversión, emulación y refreshing), asegurar el índice electrónico y los metadatos, y articularse de forma permanente con gestión documental, auditoría interna y los usuarios. La responsabilidad de preservación aplica "independientemente del sistema informático que los generó, tramitó, o en el cual se almacenan".',
+            citas:[['aufa','Acuerdo 001/2024 arts. 1.3.4, 6.1.3.1 y 6.1.3.5'],['aufa','art. 4.3.2.3 — índice electrónico'],['ley1712','Ley 1712/2014 art. 17']]
+        },
+        {
+            icon:'user-check', titulo:'Cada Funcionario',
+            resumen:'Radicar, tramitar y organizar en el SGDEA. No conservar archivos por fuera.',
+            detalle:'Al ser vinculado, trasladado o desvinculado debe recibir o entregar los documentos mediante inventario documental (FUID) conforme al CCD. Quien omita esa entrega, gestión o recibo responderá ante las autoridades disciplinarias, penales, fiscales o administrativas. Por ningún motivo puede llevarse la documentación producida en ejercicio de sus funciones: los documentos públicos son propiedad del Estado.',
+            citas:[['aufa','Acuerdo 001/2024 arts. 1.3.2 y 1.3.3'],['disciplinario','Responsabilidad del servidor público']],
+            alerta:true
+        }
+    ];
+
+    /* ===================== 15 RIESGOS ===================== */
+    const RIESGOS = [
+        { n:1,  t:'Almacenamiento local en equipos personales', cat:'ubicacion', norma:'Fallas organizacionales / errores humanos (art. 6.1.3.4 núm. 7 y 8)', base:['aufa','Acuerdo 001/2024 arts. 1.3.4 y 1.3.3 par.'], nota:'El expediente debe conformarse en el SGDEA; el documento en un disco local queda fuera del índice electrónico y del control institucional.' },
+        { n:2,  t:'Uso inadecuado de unidades compartidas', cat:'ubicacion', norma:'Fallas organizacionales (núm. 7)', base:['aufa','Acuerdo 001/2024 art. 1.3.4'], nota:'Una carpeta de red no es un sistema de gestión documental: no asegura índice electrónico, metadatos ni trazabilidad.' },
+        { n:3,  t:'Documentos que no ingresan a los sistemas institucionales', cat:'ubicacion', norma:'Fallas organizacionales (núm. 7)', base:['aufa','Acuerdo 001/2024 arts. 1.3.4 y 4.3.2.1'], nota:'Sin ingreso al SGDEA no hay expediente electrónico ni cumplimiento del ciclo vital.' },
+        { n:4,  t:'Correo electrónico usado como repositorio', cat:'ubicacion', norma:'Fallas organizacionales (núm. 7)', base:['ley1437','Ley 1437/2011 arts. 58 y 59'], nota:'El correo es canal, no archivo. El documento debe archivarse en el medio electrónico del procedimiento.' },
+        { n:5,  t:'Formatos no estandarizados (DWG, MDB, MPP)', cat:'tecnico', norma:'Obsolescencia del formato digital (núm. 2)', base:['aufa','Acuerdo 001/2024 art. 7.1.2 par.'], nota:'La norma exige formatos abiertos, libres y accesibles que permitan la correcta representación del documento.' },
+        { n:6,  t:'Ausencia de metadatos', cat:'tecnico', norma:'Obsolescencia del software (núm. 3)', base:['aufa','Acuerdo 001/2024 art. 4.3.2.2 núm. 4'], nota:'Los metadatos de contenido, estructura y contexto son elemento mínimo obligatorio del expediente electrónico.' },
+        { n:7,  t:'Duplicidad documental sin control de versiones', cat:'organizacional', norma:'Errores humanos (núm. 8)', base:['aufa','Acuerdo 001/2024 art. 4.3.2.3'], nota:'El índice electrónico debe asegurar la secuencia y el orden original de los documentos del expediente.' },
+        { n:8,  t:'Dependencia de un solo funcionario', cat:'organizacional', norma:'Fallas organizacionales (núm. 7)', base:['aufa','Acuerdo 001/2024 art. 1.3.2'], nota:'La entrega por inventario documental (FUID) al vincularse, trasladarse o desvincularse existe justamente para evitar esto.' },
+        { n:9,  t:'Uso de medios extraíbles (USB, CD)', cat:'seguridad', norma:'Obsolescencia y degradación del soporte físico (núm. 1)', base:['ley1581','Ley 1581/2012 art. 4'], nota:'Soporte degradable, sin respaldo ni control de acceso; si contiene datos personales, suma riesgo sancionatorio.' },
+        { n:10, t:'Falta de copias de seguridad', cat:'tecnico', norma:'Desastres naturales y ataques deliberados (núm. 5 y 6)', base:['aufa','Acuerdo 001/2024 art. 6.1.3.4'], nota:'El plan de preservación debe evaluar y tratar explícitamente estos riesgos.' },
+        { n:11, t:'Información en aplicaciones no institucionales', cat:'seguridad', norma:'Ataques deliberados a la información (núm. 6)', base:['aufa','Acuerdo 001/2024 arts. 1.3.4 y 6.1.3.1'], nota:'La responsabilidad de preservación aplica sin importar el sistema informático: usar una app no institucional no exime, agrava.' },
+        { n:12, t:'Documentos sin clasificación documental (TRD)', cat:'organizacional', norma:'Fallas organizacionales (núm. 7)', base:['ley594','Ley 594/2000 art. 24'], nota:'Sin serie y subserie no hay tiempo de retención ni disposición final definida.' },
+        { n:13, t:'Ausencia de firmas electrónicas', cat:'seguridad', norma:'Errores humanos (núm. 8)', base:['ley527','Ley 527/1999 arts. 7 y 10'], nota:'La firma es lo que permite sostener autenticidad y fuerza probatoria del documento electrónico.' },
+        { n:14, t:'Información crítica sin identificar', cat:'organizacional', norma:'Fallas organizacionales (núm. 7)', base:['aufa','Acuerdo 001/2024 art. 6.1.1.2 par.'], nota:'El diagnóstico integral de gestión documental es requisito previo para formular los planes del SIC.' },
+        { n:15, t:'Desconocimiento de lineamientos de preservación', cat:'organizacional', norma:'Errores humanos (núm. 8)', base:['aufa','Acuerdo 001/2024 art. 1.3.1'], nota:'La divulgación y el seguimiento son parte del deber de la alta dirección y de los jefes de oficina.' }
+    ];
+    const CAT_LABEL = { ubicacion:'Ubicación del documento', tecnico:'Técnico / formato', organizacional:'Organizacional', seguridad:'Seguridad y validez' };
+
+    /* ===================== 8 RIESGOS NORMATIVOS ===================== */
+    const RIESGOS_NORMA = [
+        { n:1, t:'Obsolescencia y degradación del soporte físico', icon:'hard-drive', e:'Refreshing: transferir los datos a un soporte nuevo sin alterar el contenido.' },
+        { n:2, t:'Obsolescencia del formato del documento digital', icon:'file-x', e:'Conversión a formatos abiertos, libres y accesibles.' },
+        { n:3, t:'Obsolescencia del software', icon:'app-window', e:'Migración o emulación del entorno de ejecución.' },
+        { n:4, t:'Obsolescencia del hardware', icon:'cpu', e:'Migración a nuevas plataformas.' },
+        { n:5, t:'Desastres naturales', icon:'cloud-lightning', e:'Redundancia geográfica y copias de respaldo.' },
+        { n:6, t:'Ataques deliberados a la información', icon:'shield-alert', e:'Control de acceso, cifrado y trazabilidad.' },
+        { n:7, t:'Fallas organizacionales', icon:'users', e:'Política documental, procedimientos y articulación TI–archivo.' },
+        { n:8, t:'Errores humanos', icon:'user-x', e:'Capacitación, validaciones del SGDEA y registro histórico de acciones.' }
+    ];
+
+    /* ===================== CONSECUENCIAS ===================== */
+    const CONSECUENCIAS = [
+        {
+            icon:'database-backup', titulo:'Pérdida de información',
+            resumen:'Documentos eliminados por error, discos dañados o formatos obsoletos que ya no pueden abrirse.',
+            detalle:'La norma no admite que la pérdida sea un accidente imprevisible: obliga a evaluar previamente la obsolescencia del soporte, del formato, del software y del hardware, y a documentar la estrategia elegida para mitigarla. Una pérdida sin plan previo es un incumplimiento, no una fatalidad.',
+            citas:[['aufa','Acuerdo 001/2024 arts. 6.1.3.4 y 6.1.3.5'],['ley594','Ley 594/2000 art. 46']]
+        },
+        {
+            icon:'gavel', titulo:'Responsabilidad legal y disciplinaria',
+            resumen:'La omisión en la gestión y entrega de documentos genera responsabilidad personal.',
+            detalle:'Quien se traslade, retire o posesione omitiendo la entrega, la debida gestión y el recibo de los documentos "responderá ante las autoridades disciplinarias, penales, fiscales o administrativas". A ello se suma la facultad sancionatoria del art. 35 de la Ley 594 de 2000 y, en casos de destrucción u ocultamiento, el art. 292 del Código Penal.',
+            citas:[['aufa','Acuerdo 001/2024 art. 1.3.3'],['disciplinario','Responsabilidad del servidor público'],['ley594','Ley 594/2000 art. 35']]
+        },
+        {
+            icon:'timer', titulo:'Retrasos en trámites y quejas ciudadanas',
+            resumen:'Documentos mal radicados, sin clasificar o duplicados generan demoras e ineficiencia.',
+            detalle:'Los documentos electrónicos y sus metadatos deben mantenerse disponibles a los grupos de interés, y los sistemas de información deben estar articulados con el Programa de Gestión Documental. Un expediente incompleto o mal indexado afecta directamente el derecho de acceso a la información pública.',
+            citas:[['aufa','Acuerdo 001/2024 art. 7.1.2'],['ley1712','Ley 1712/2014 arts. 16 y 17']]
+        },
+        {
+            icon:'shield-off', titulo:'Vulneración de la seguridad de la información',
+            resumen:'Documentos confidenciales en equipos personales, sin cifrado o accesibles a personal no autorizado.',
+            detalle:'La reserva aplica a la información, no al documento: el responsable debe verificar qué información está reservada y aplicar las tablas de control de acceso. Si el documento contiene datos personales, se añade el deber de seguridad y confidencialidad de la Ley 1581 de 2012 y, en caso de acceso abusivo o daño, los tipos penales de la Ley 1273 de 2009.',
+            citas:[['aufa','Acuerdo 001/2024 art. 7.1.3'],['ley1581','Ley 1581/2012 arts. 4 y 17'],['ley1273','Ley 1273/2009']]
+        }
+    ];
+
+    /* ===================== CHECKLIST SGDEA ===================== */
+    const CHECKLIST = [
+        { t:'Radicar correctamente', d:'Completar todos los campos obligatorios: tipo documental, dependencia, asunto y anexos. Una radicación incompleta genera devoluciones y retrasos.', citas:[['aufa','art. 4.3.2.1']] },
+        { t:'Clasificar con la TRD', d:'Asignar serie y subserie documental según la Tabla de Retención Documental. Esto define el tiempo de conservación y la disposición final.', citas:[['ley594','Ley 594/2000 art. 24'],['dec1080','Decreto 1080/2015 art. 2.8.2.5.8']] },
+        { t:'Usar formatos abiertos y accesibles', d:'Preferir formatos abiertos, libres y accesibles que permitan la correcta representación del documento. PDF/A (ISO 19005) es la recomendación técnica usual; si la entidad quiere obligarlo, debe fijarlo en su PGD.', citas:[['aufa','art. 7.1.2 par.'],['iso','ISO 19005 — recomendación técnica']] },
+        { t:'Firmar electrónicamente', d:'Usar la firma electrónica institucional para dar validez. Debe ofrecerse al interesado el mecanismo para verificar la autenticidad del documento firmado.', citas:[['ley527','Ley 527/1999 arts. 7 y 10'],['aufa','art. 7.1.2 par.']] },
+        { t:'Gestionar expedientes', d:'Agrupar documentos por expediente, respetar el principio de orden original y no retirar documentos sin autorización del archivo. El índice electrónico se actualiza con cada incorporación.', citas:[['aufa','arts. 4.3.2.2 y 4.3.2.3']] }
+    ];
+
+    /* ===================== QUIZ ===================== */
+    const QUIZ = [
+        {
+            q: '¿Cuál es la norma vigente que regula íntegramente la función archivística del Estado colombiano?',
+            o: ['Acuerdo 006 de 2014 del AGN', 'Acuerdo 001 de 2024 del AGN', 'Ley 527 de 1999', 'Decreto 2609 de 2012'],
+            c: 1,
+            exp: 'El Acuerdo 001 de 2024 (Acuerdo Único de la Función Archivística, 29 de febrero de 2024) derogó expresamente el Acuerdo 006 de 2014, el Acuerdo 003 de 2015 y otros. El Decreto 2609 de 2012 fue compilado en el Decreto 1080 de 2015.',
+            k: 'aufa'
+        },
+        {
+            q: '¿Qué norma fundamenta la obligación de las entidades públicas de conservar sus documentos de archivo?',
+            o: ['La Ley 527 de 1999, porque regula los mensajes de datos', 'La Ley 594 de 2000 y el Acuerdo 001 de 2024', 'La Ley 1581 de 2012 de datos personales', 'Ninguna: es una buena práctica voluntaria'],
+            c: 1,
+            exp: 'Es un error frecuente atribuir el deber archivístico a la Ley 527 de 1999. Esa ley regula el valor jurídico de los mensajes de datos y fija requisitos de conservación en su art. 12, pero la obligación de las entidades nace de la Ley 594 de 2000 (arts. 11, 19, 21, 46) y hoy se desarrolla en el Acuerdo 001 de 2024.',
+            k: 'ley527'
+        },
+        {
+            q: '¿Cuántos riesgos mínimos obliga la norma a evaluar al formular el Plan de Preservación Digital a Largo Plazo?',
+            o: ['4', '8', '15', 'No los enumera'],
+            c: 1,
+            exp: 'El art. 6.1.3.4 del Acuerdo 001 de 2024 enumera ocho riesgos mínimos: obsolescencia del soporte físico, del formato, del software y del hardware; desastres naturales; ataques deliberados; fallas organizacionales; y errores humanos.',
+            k: 'aufa'
+        },
+        {
+            q: '¿Qué formatos exige la norma para disponer los documentos electrónicos de archivo?',
+            o: ['Exclusivamente PDF/A', 'Formatos abiertos, libres y accesibles', 'Cualquier formato, si hay copia de respaldo', 'Solo los formatos del proveedor del SGDEA'],
+            c: 1,
+            exp: 'El parágrafo del art. 7.1.2 exige "formatos abiertos, libres y accesibles que permitan su correcta representación". PDF/A (ISO 19005) es la recomendación técnica habitual y cumple ese criterio, pero la norma no lo nombra: si la entidad quiere obligarlo debe establecerlo en su Programa de Gestión Documental.',
+            k: 'aufa'
+        },
+        {
+            q: 'Un funcionario se traslada de dependencia y deja sus documentos en el disco de su equipo, sin inventario. ¿Qué dice la norma?',
+            o: ['Es una falla menor sin consecuencias personales', 'Debe entregarlos por inventario; de lo contrario responde disciplinaria, penal, fiscal o administrativamente', 'Basta con enviarlos por correo a su jefe', 'Puede conservarlos porque los produjo él'],
+            c: 1,
+            exp: 'El art. 1.3.2 obliga a entregar o recibir los documentos mediante inventario documental (FUID) conforme al CCD. El art. 1.3.3 añade que quien omita esa entrega o gestión "responderá ante las autoridades disciplinarias, penales, fiscales o administrativas", y su parágrafo prohíbe llevarse la documentación: los documentos públicos son propiedad del Estado.',
+            k: 'aufa'
+        },
+        {
+            q: '¿De qué se compone el Sistema Integrado de Conservación (SIC)?',
+            o: ['Solo del Plan de Conservación Documental', 'Del Plan de Conservación Documental y del Plan de Preservación Digital a Largo Plazo', 'Del PGD y del PINAR', 'Del SGDEA y de las copias de respaldo'],
+            c: 1,
+            exp: 'El art. 6.1.1.2 establece los dos componentes: el Plan de Conservación Documental (soportes físicos o analógicos) y el Plan de Preservación Digital a Largo Plazo (documentos digitales o electrónicos). Su parágrafo añade que el diagnóstico integral de gestión documental es requisito para formular ambos.',
+            k: 'aufa'
+        }
+    ];
+
+    /* =========================================================
+       ESTADO Y ALMACENAMIENTO
+       ========================================================= */
+    const STORE_KEY = 'preservacion-digital-v2';
+    let state = { risks: [], checks: [], quiz: {} };
+
+    function loadState() {
+        try {
+            const raw = localStorage.getItem(STORE_KEY);
+            if (raw) {
+                const p = JSON.parse(raw);
+                state.risks = Array.isArray(p.risks) ? p.risks : [];
+                state.checks = Array.isArray(p.checks) ? p.checks : [];
+                state.quiz = {};
+                if (p.quiz && typeof p.quiz === 'object') {
+                    Object.keys(p.quiz).forEach(k => {
+                        const v = p.quiz[k];
+                        if (v && typeof v === 'object') state.quiz[k] = { ok: v.ok === true, pick: v.pick };
+                    });
                 }
-            });
-
-            // Update dots
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentSlide);
-            });
-
-            // Update progress bar
-            const progress = ((currentSlide + 1) / totalSlides) * 100;
-            progressBar.style.width = progress + '%';
-
-            // Update counter
-            const num = String(currentSlide + 1).padStart(2, '0');
-            const total = String(totalSlides).padStart(2, '0');
-            slideCounter.textContent = `${num} / ${total}`;
-
-            // Update buttons
-            prevBtn.disabled = currentSlide === 0;
-            nextBtn.disabled = currentSlide === totalSlides - 1;
-        }
-
-        function goToSlide(index) {
-            if (index < 0 || index >= totalSlides || index === currentSlide) return;
-            currentSlide = index;
-            updateUI();
-        }
-
-        function nextSlide() {
-            if (currentSlide < totalSlides - 1) {
-                goToSlide(currentSlide + 1);
             }
-        }
+        } catch (e) { /* almacenamiento no disponible: se sigue sin persistencia */ }
+    }
+    function saveState() {
+        try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* ignorado */ }
+    }
 
-        function prevSlide() {
-            if (currentSlide > 0) {
-                goToSlide(currentSlide - 1);
-            }
-        }
+    /* =========================================================
+       OVERLAYS
+       ========================================================= */
+    function closeOverlays() {
+        document.querySelectorAll('.overlay.open').forEach(o => o.classList.remove('open'));
+    }
+    function openOverlay(id) {
+        closeOverlays();
+        document.getElementById(id).classList.add('open');
+    }
 
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
-                e.preventDefault();
-                nextSlide();
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                e.preventDefault();
-                prevSlide();
-            } else if (e.key === 'Home') {
-                e.preventDefault();
-                goToSlide(0);
-            } else if (e.key === 'End') {
-                e.preventDefault();
-                goToSlide(totalSlides - 1);
-            }
+    function openNorma(key) {
+        const n = NORMAS[key];
+        if (!n) return;
+        document.getElementById('normaKicker').textContent = n.kicker || 'Norma';
+        document.getElementById('normaTitle').textContent = n.title;
+        document.getElementById('normaSubtitle').textContent = n.subtitle || '';
+
+        let html = '';
+        if (n.aviso) {
+            html += '<div class="bg-amber-500/[0.08] border border-amber-500/25 rounded-xl p-4 mb-5 flex items-start gap-3">'
+                 +  '<i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0"></i>'
+                 +  '<p class="text-xs text-neutral-300 leading-relaxed"><strong class="text-amber-300">Precisión de cita:</strong> ' + n.aviso + '</p>'
+                 +  '</div>';
+        }
+        html += '<div class="space-y-3">';
+        n.arts.forEach(([t, d]) => {
+            html += '<div class="bg-white/[0.02] border border-white/10 rounded-xl p-4">'
+                 +  '<p class="font-heading font-medium text-[0.82rem] text-[#6ee7a0] mb-1.5">' + t + '</p>'
+                 +  '<p class="text-xs text-neutral-400 leading-relaxed">' + d + '</p>'
+                 +  '</div>';
         });
+        html += '</div>';
+        if (n.url) {
+            html += '<a href="' + n.url + '" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-5 text-xs font-heading text-[#239b48] hover:text-white transition-colors">'
+                 +  '<i data-lucide="external-link" class="w-3.5 h-3.5"></i> Consultar la fuente oficial</a>';
+        }
+        document.getElementById('normaBody').innerHTML = html;
+        openOverlay('normaOverlay');
+        lucide.createIcons();
+    }
 
-        // Touch/swipe support
-        let touchStartX = 0;
-        let touchEndX = 0;
+    function toggleIndex() {
+        const o = document.getElementById('indexOverlay');
+        if (o.classList.contains('open')) { closeOverlays(); } else { buildIndex(); openOverlay('indexOverlay'); }
+    }
+    function toggleHelp() {
+        const o = document.getElementById('helpOverlay');
+        if (o.classList.contains('open')) { closeOverlays(); } else { openOverlay('helpOverlay'); }
+    }
+    function openFuentes() { openNorma('aufa'); }
 
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
+    /* =========================================================
+       NAVEGACIÓN DE DIAPOSITIVAS
+       ========================================================= */
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const totalSlides = slides.length;
+    let currentSlide = 0;
 
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            const diff = touchStartX - touchEndX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0) {
-                    nextSlide();
-                } else {
-                    prevSlide();
-                }
-            }
-        }, { passive: true });
+    const progressBar = document.getElementById('progressBar');
+    const slideCounter = document.getElementById('slideCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const dotsContainer = document.getElementById('dotsContainer');
 
-        // Initial state
+    function buildDots() {
+        dotsContainer.innerHTML = slides.map((s, i) =>
+            '<button class="dot w-2 h-2 rounded-full bg-neutral-600" data-dot="' + i + '" title="' +
+            (i + 1) + '. ' + s.dataset.title + '" onclick="goToSlide(' + i + ')"></button>'
+        ).join('');
+    }
+
+    function buildIndex() {
+        document.getElementById('indexGrid').innerHTML = slides.map((s, i) =>
+            '<div class="idx-card ' + (i === currentSlide ? 'current' : '') + ' rounded-xl p-3.5 flex items-start gap-3" onclick="goToSlide(' + i + '); closeOverlays();">'
+            + '<div class="num-badge w-7 h-7 rounded-lg flex items-center justify-center font-heading text-xs text-[#239b48] flex-shrink-0">' + String(i + 1).padStart(2, '0') + '</div>'
+            + '<div><p class="text-[0.6rem] font-mono tracking-widest uppercase text-neutral-500 mb-0.5">' + s.dataset.tema + '</p>'
+            + '<p class="text-xs font-heading text-neutral-200 leading-snug">' + s.dataset.title + '</p></div></div>'
+        ).join('');
+    }
+
+    function updateUI() {
+        slides.forEach((slide, i) => {
+            slide.classList.remove('active', 'exit-left');
+            if (i === currentSlide) { slide.classList.add('active'); slide.scrollTop = 0; }
+            else if (i < currentSlide) { slide.classList.add('exit-left'); }
+        });
+        document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+
+        progressBar.style.width = (((currentSlide + 1) / totalSlides) * 100) + '%';
+        slideCounter.textContent = String(currentSlide + 1).padStart(2, '0') + ' / ' + String(totalSlides).padStart(2, '0');
+        prevBtn.disabled = currentSlide === 0;
+        nextBtn.disabled = currentSlide === totalSlides - 1;
+
+        if (slides[currentSlide].querySelector('[data-count]')) runCounters(slides[currentSlide]);
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= totalSlides || index === currentSlide) return;
+        currentSlide = index;
         updateUI();
+    }
+    function nextSlide() { if (currentSlide < totalSlides - 1) goToSlide(currentSlide + 1); }
+    function prevSlide() { if (currentSlide > 0) goToSlide(currentSlide - 1); }
+
+    /* Contadores animados */
+    function runCounters(scope) {
+        scope.querySelectorAll('[data-count]').forEach(el => {
+            const target = parseInt(el.dataset.count, 10);
+            let cur = 0;
+            const step = Math.max(1, Math.round(target / 24));
+            el.textContent = '0';
+            const t = setInterval(() => {
+                cur += step;
+                if (cur >= target) { cur = target; clearInterval(t); }
+                el.textContent = cur;
+            }, 32);
+        });
+    }
+
+    /* =========================================================
+       CONSTRUCCIÓN DE COMPONENTES INTERACTIVOS
+       ========================================================= */
+
+    /* -- Flip cards de conceptos -- */
+    function buildConceptos() {
+        document.getElementById('conceptCards').innerHTML = CONCEPTOS.map((c, i) =>
+            '<div class="flip" onclick="this.classList.toggle(\'flipped\')">'
+            + '<div class="flip-inner">'
+            +   '<div class="flip-face bg-[#050505]/80 border border-white/10">'
+            +     '<i data-lucide="' + c.icon + '" class="w-5 h-5 text-[#239b48] mb-2"></i>'
+            +     '<p class="font-heading font-medium text-sm text-[#6ee7a0] mb-1">' + c.t + '</p>'
+            +     '<p class="text-[0.7rem] text-neutral-400 leading-snug">' + c.d + '</p>'
+            +     '<p class="text-[0.58rem] text-neutral-600 mt-2 flex items-center gap-1"><i data-lucide="rotate-cw" class="w-2.5 h-2.5"></i> ver norma</p>'
+            +   '</div>'
+            +   '<div class="flip-face flip-back bg-[#239b48]/[0.09] border border-[#239b48]/35">'
+            +     '<p class="text-[0.58rem] font-mono tracking-widest uppercase text-[#239b48] mb-1.5">Fundamento</p>'
+            +     '<p class="text-[0.72rem] text-neutral-200 leading-snug mb-2.5">' + c.n + '</p>'
+            +     '<button class="norma-chip self-start" onclick="event.stopPropagation(); openNorma(\'' + c.k + '\')"><i data-lucide="book-open" class="w-3 h-3"></i> Ver artículos</button>'
+            +   '</div>'
+            + '</div></div>'
+        ).join('');
+    }
+
+    /* -- Timeline normativo -- */
+    function buildTimeline() {
+        document.getElementById('timeline').innerHTML =
+            '<div class="absolute left-[6px] top-2 bottom-2 w-[1px] bg-white/10"></div>'
+            + TIMELINE.map((t, i) =>
+                '<div class="tl-node ' + (i === 6 ? 'active ' : '') + (t.derogada ? 'derogada ' : '') + 'relative flex items-start gap-4 pb-5" data-tl="' + i + '" onclick="selectTimeline(' + i + ')">'
+                + '<div class="tl-dot mt-1 flex-shrink-0 relative z-10"></div>'
+                + '<div class="min-w-0">'
+                +   '<p class="text-[0.58rem] font-mono tracking-widest uppercase text-neutral-600">' + t.año + '</p>'
+                +   '<p class="tl-label font-heading font-medium text-sm text-neutral-300 leading-tight transition-colors">' + t.norma
+                +     (t.destacado ? ' <span class="text-[0.55rem] align-middle bg-[#239b48]/20 border border-[#239b48]/40 text-[#6ee7a0] px-1.5 py-0.5 rounded-full font-heading">EJE</span>' : '')
+                +     (t.derogada ? ' <span class="text-[0.55rem] align-middle bg-red-500/15 border border-red-500/35 text-red-300 px-1.5 py-0.5 rounded-full font-heading">DEROGA</span>' : '')
+                +   '</p>'
+                +   '<p class="text-[0.68rem] text-neutral-500 leading-snug">' + t.label + '</p>'
+                + '</div></div>'
+            ).join('');
+        selectTimeline(6);
+    }
+
+    function selectTimeline(i) {
+        const t = TIMELINE[i];
+        document.querySelectorAll('.tl-node').forEach(n => n.classList.toggle('active', n.dataset.tl === String(i)));
+        const n = NORMAS[t.k];
+        document.getElementById('timelineDetail').innerHTML =
+            '<p class="text-[0.6rem] font-mono tracking-widest uppercase text-[#239b48] mb-1.5">' + t.año + ' · ' + (n.kicker || '') + '</p>'
+            + '<h3 class="font-heading font-medium text-lg tracking-tight leading-tight mb-1">' + t.norma + ' — ' + t.label + '</h3>'
+            + '<p class="text-[0.7rem] text-neutral-500 leading-relaxed mb-4">' + (n.subtitle || '') + '</p>'
+            + '<p class="text-[0.6rem] font-mono tracking-widest uppercase text-neutral-500 mb-1.5">Qué sostiene en esta presentación</p>'
+            + '<p class="text-xs text-neutral-300 leading-relaxed mb-4">' + t.sostiene + '</p>'
+            + (t.ojo ? '<div class="bg-amber-500/[0.07] border border-amber-500/20 rounded-lg p-3 mb-4 flex items-start gap-2.5">'
+                      + '<i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-400 mt-0.5 flex-shrink-0"></i>'
+                      + '<p class="text-[0.68rem] text-neutral-400 leading-relaxed">' + t.ojo + '</p></div>' : '')
+            + '<button class="norma-chip ' + (t.derogada ? 'is-derogada' : '') + '" onclick="openNorma(\'' + t.k + '\')">'
+            + '<i data-lucide="book-open" class="w-3 h-3"></i> Ver artículos citables</button>';
+        lucide.createIcons();
+    }
+
+    /* -- Acordeón de responsabilidades -- */
+    function buildResponsabilidades() {
+        document.getElementById('responsabilidades').innerHTML = RESPONSABILIDADES.map((r, i) =>
+            '<div class="acc-item bg-white/[0.02] border border-white/10 rounded-xl overflow-hidden transition-all" data-acc="' + i + '">'
+            + '<button class="w-full flex items-center gap-4 p-4 text-left" onclick="toggleAcc(' + i + ')">'
+            +   '<div class="w-9 h-9 rounded-lg bg-[#239b48]/10 border border-[#239b48]/25 flex items-center justify-center flex-shrink-0">'
+            +     '<i data-lucide="' + r.icon + '" class="w-4 h-4 text-[#239b48]"></i></div>'
+            +   '<div class="min-w-0 flex-1">'
+            +     '<p class="font-heading font-medium text-base leading-tight">' + r.titulo
+            +       (r.alerta ? ' <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-400 inline align-middle ml-1"></i>' : '') + '</p>'
+            +     '<p class="text-xs text-neutral-500 leading-snug mt-0.5">' + r.resumen + '</p></div>'
+            +   '<i data-lucide="chevron-down" class="acc-chevron w-4 h-4 text-neutral-500 flex-shrink-0"></i>'
+            + '</button>'
+            + '<div class="acc-body"><div class="px-4 pb-4 pl-[4.25rem]">'
+            +   '<p class="text-xs text-neutral-400 leading-relaxed mb-3">' + r.detalle + '</p>'
+            +   '<div class="flex flex-wrap gap-1.5">'
+            +     r.citas.map(([k, l]) => '<button class="norma-chip" onclick="openNorma(\'' + k + '\')"><i data-lucide="scale" class="w-3 h-3"></i> ' + l + '</button>').join('')
+            +   '</div>'
+            + '</div></div></div>'
+        ).join('');
+    }
+    function toggleAcc(i) {
+        const item = document.querySelector('[data-acc="' + i + '"]');
+        const wasOpen = item.classList.contains('open');
+        document.querySelectorAll('.acc-item').forEach(a => a.classList.remove('open'));
+        if (!wasOpen) item.classList.add('open');
+    }
+
+    /* -- Tablero de 15 riesgos -- */
+    function buildRiskBoard() {
+        document.getElementById('riskBoard').innerHTML = RIESGOS.map(r =>
+            '<div class="risk-chip ' + (state.risks.includes(r.n) ? 'selected' : '') + ' bg-[#050505]/70 rounded-xl p-3 flex items-start gap-2.5" data-risk="' + r.n + '" data-cat="' + r.cat + '">'
+            + '<div class="risk-check mt-0.5" onclick="event.stopPropagation(); toggleRisk(' + r.n + ')"><i data-lucide="check" class="w-2.5 h-2.5 text-white"></i></div>'
+            + '<div class="min-w-0 flex-1" onclick="openRisk(' + r.n + ')">'
+            +   '<p class="text-[0.72rem] text-neutral-200 leading-snug">' + '<span class="text-neutral-600 font-heading">' + r.n + '.</span> ' + r.t + '</p>'
+            +   '<p class="text-[0.58rem] text-neutral-600 font-heading mt-1">' + CAT_LABEL[r.cat] + '</p>'
+            + '</div></div>'
+        ).join('');
+        updateRiskScore();
+    }
+    function toggleRisk(n) {
+        const i = state.risks.indexOf(n);
+        if (i >= 0) state.risks.splice(i, 1); else state.risks.push(n);
+        saveState();
+        document.querySelector('[data-risk="' + n + '"]').classList.toggle('selected', state.risks.includes(n));
+        updateRiskScore();
+    }
+    function updateRiskScore() {
+        const el = document.getElementById('riskScore');
+        el.textContent = state.risks.length;
+        el.className = state.risks.length === 0 ? 'text-[#239b48]' : (state.risks.length <= 5 ? 'text-amber-400' : 'text-red-400');
+    }
+    function resetRisks() { state.risks = []; saveState(); buildRiskBoard(); lucide.createIcons(); }
+    function filterRisks(cat, btn) {
+        document.querySelectorAll('[onclick^="filterRisks"]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('[data-risk]').forEach(el =>
+            el.classList.toggle('dimmed', cat !== 'todos' && el.dataset.cat !== cat));
+    }
+    function openRisk(n) {
+        const r = RIESGOS.find(x => x.n === n);
+        document.getElementById('normaKicker').textContent = 'Riesgo documental ' + r.n + ' de 15 · ' + CAT_LABEL[r.cat];
+        document.getElementById('normaTitle').textContent = r.t;
+        document.getElementById('normaSubtitle').textContent = '';
+        document.getElementById('normaBody').innerHTML =
+            '<div class="bg-white/[0.02] border border-white/10 rounded-xl p-4 mb-3">'
+            + '<p class="font-heading font-medium text-[0.8rem] text-[#6ee7a0] mb-1.5">Riesgo normativo correspondiente</p>'
+            + '<p class="text-xs text-neutral-400 leading-relaxed">' + r.norma + '</p></div>'
+            + '<div class="bg-white/[0.02] border border-white/10 rounded-xl p-4 mb-4">'
+            + '<p class="font-heading font-medium text-[0.8rem] text-[#6ee7a0] mb-1.5">Por qué es un riesgo</p>'
+            + '<p class="text-xs text-neutral-400 leading-relaxed">' + r.nota + '</p></div>'
+            + '<button class="norma-chip" onclick="openNorma(\'' + r.base[0] + '\')"><i data-lucide="scale" class="w-3 h-3"></i> ' + r.base[1] + '</button>'
+            + '<button class="norma-chip ml-2" onclick="openNorma(\'aufa\')"><i data-lucide="list-ordered" class="w-3 h-3"></i> Los 8 riesgos del art. 6.1.3.4</button>';
+        openOverlay('normaOverlay');
+        lucide.createIcons();
+    }
+
+    /* -- 8 riesgos normativos -- */
+    function buildRiesgosNorma() {
+        document.getElementById('riesgosNorma').innerHTML = RIESGOS_NORMA.map(r =>
+            '<div class="card-hover risk-card bg-[#050505]/80 border border-white/10 rounded-xl p-4">'
+            + '<div class="flex items-center gap-2 mb-2">'
+            +   '<i data-lucide="' + r.icon + '" class="w-4 h-4 text-red-400"></i>'
+            +   '<span class="text-[0.6rem] font-heading text-neutral-600">núm. ' + r.n + '</span></div>'
+            + '<p class="text-[0.78rem] font-heading text-neutral-200 leading-snug mb-2">' + r.t + '</p>'
+            + '<p class="text-[0.63rem] text-neutral-500 leading-relaxed"><span class="text-[#6ee7a0]">Tratamiento:</span> ' + r.e + '</p>'
+            + '</div>'
+        ).join('');
+    }
+
+    /* -- Consecuencias (tarjetas expandibles) -- */
+    function buildConsecuencias() {
+        document.getElementById('consecuencias').innerHTML = CONSECUENCIAS.map((c, i) =>
+            '<div class="acc-item risk-card bg-[#050505]/80 border border-white/10 rounded-xl overflow-hidden" data-cons="' + i + '">'
+            + '<button class="w-full text-left p-5" onclick="toggleCons(' + i + ')">'
+            +   '<div class="flex items-start justify-between gap-3 mb-2">'
+            +     '<div class="flex items-center gap-2.5">'
+            +       '<i data-lucide="' + c.icon + '" class="w-4 h-4 text-red-400 flex-shrink-0"></i>'
+            +       '<h3 class="font-heading font-medium text-sm leading-tight">' + c.titulo + '</h3></div>'
+            +     '<i data-lucide="chevron-down" class="acc-chevron w-4 h-4 text-neutral-500 flex-shrink-0 mt-0.5"></i></div>'
+            +   '<p class="text-xs text-neutral-400 leading-relaxed">' + c.resumen + '</p>'
+            + '</button>'
+            + '<div class="acc-body"><div class="px-5 pb-5">'
+            +   '<div class="h-[1px] bg-white/10 mb-3"></div>'
+            +   '<p class="text-[0.72rem] text-neutral-400 leading-relaxed mb-3">' + c.detalle + '</p>'
+            +   '<div class="flex flex-wrap gap-1.5">'
+            +     c.citas.map(([k, l]) => '<button class="norma-chip" onclick="event.stopPropagation(); openNorma(\'' + k + '\')"><i data-lucide="scale" class="w-3 h-3"></i> ' + l + '</button>').join('')
+            +   '</div></div></div></div>'
+        ).join('');
+    }
+    function toggleCons(i) {
+        const item = document.querySelector('[data-cons="' + i + '"]');
+        const wasOpen = item.classList.contains('open');
+        document.querySelectorAll('[data-cons]').forEach(a => a.classList.remove('open'));
+        if (!wasOpen) item.classList.add('open');
+    }
+
+    /* -- Checklist SGDEA -- */
+    function buildChecklist() {
+        document.getElementById('sgdeaChecklist').innerHTML = CHECKLIST.map((c, i) =>
+            '<div class="check-item ' + (state.checks.includes(i) ? 'done' : '') + ' bg-[#050505]/70 border border-white/10 rounded-xl p-4 flex items-start gap-3" data-check="' + i + '" onclick="toggleCheck(' + i + ')">'
+            + '<div class="check-box mt-0.5"><i data-lucide="check" class="w-3 h-3 text-white"></i></div>'
+            + '<div class="min-w-0 flex-1">'
+            +   '<p class="check-title font-heading font-medium text-[0.82rem] mb-1">' + (i + 1) + '. ' + c.t + '</p>'
+            +   '<p class="text-[0.7rem] text-neutral-400 leading-relaxed mb-2">' + c.d + '</p>'
+            +   '<div class="flex flex-wrap gap-1.5">'
+            +     c.citas.map(([k, l]) => '<button class="norma-chip" onclick="event.stopPropagation(); openNorma(\'' + k + '\')"><i data-lucide="scale" class="w-3 h-3"></i> ' + l + '</button>').join('')
+            +   '</div></div></div>'
+        ).join('');
+        updateCheckProgress();
+    }
+    function toggleCheck(i) {
+        const p = state.checks.indexOf(i);
+        if (p >= 0) state.checks.splice(p, 1); else state.checks.push(i);
+        saveState();
+        document.querySelector('[data-check="' + i + '"]').classList.toggle('done', state.checks.includes(i));
+        updateCheckProgress();
+    }
+    function updateCheckProgress() {
+        document.getElementById('checkCount').textContent = state.checks.length;
+        document.getElementById('checkProgress').style.width = (state.checks.length / CHECKLIST.length * 100) + '%';
+    }
+
+    /* -- Quiz -- */
+    let quizIdx = 0;
+    function buildQuiz() {
+        document.getElementById('quizTotal').textContent = QUIZ.length;
+        renderQuiz();
+    }
+    function quizScore() { return Object.values(state.quiz).filter(v => v && v.ok === true).length; }
+
+    function renderQuiz() {
+        if (quizIdx >= QUIZ.length) { renderQuizResult(); return; }
+        const q = QUIZ[quizIdx];
+        const answered = Object.prototype.hasOwnProperty.call(state.quiz, quizIdx);
+
+        document.getElementById('quizIdx').textContent = quizIdx + 1;
+        document.getElementById('quizScore').textContent = quizScore();
+        document.getElementById('quizProgress').style.width = (quizIdx / QUIZ.length * 100) + '%';
+
+        let html = '<div class="bg-[#050505]/80 border border-white/10 rounded-2xl p-6">'
+                 + '<p class="font-heading font-medium text-base md:text-lg leading-snug mb-5">' + q.q + '</p>'
+                 + '<div class="space-y-2.5">';
+        q.o.forEach((opt, i) => {
+            let cls = 'quiz-opt bg-white/[0.02] rounded-xl p-3.5 flex items-start gap-3';
+            if (answered) {
+                cls += ' locked';
+                if (i === q.c) cls += ' correct';
+                else if (!state.quiz[quizIdx].ok && i === state.quiz[quizIdx].pick) cls += ' wrong';
+            }
+            html += '<div class="' + cls + '"' + (answered ? '' : ' onclick="answerQuiz(' + i + ')"') + '>'
+                 +  '<span class="font-heading text-[0.65rem] text-neutral-500 mt-0.5 flex-shrink-0">' + String.fromCharCode(65 + i) + '</span>'
+                 +  '<span class="text-sm text-neutral-300 leading-snug">' + opt + '</span>'
+                 +  (answered && i === q.c ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-[#239b48] ml-auto flex-shrink-0"></i>' : '')
+                 +  '</div>';
+        });
+        html += '</div>';
+
+        if (answered) {
+            const ok = state.quiz[quizIdx].ok === true;
+            html += '<div class="mt-5 rounded-xl p-4 border ' + (ok ? 'bg-[#239b48]/[0.08] border-[#239b48]/25' : 'bg-amber-500/[0.07] border-amber-500/25') + '">'
+                 +  '<p class="text-xs font-medium mb-1.5 ' + (ok ? 'text-[#6ee7a0]' : 'text-amber-300') + '">'
+                 +  (ok ? 'Correcto' : 'Revisemos esto') + '</p>'
+                 +  '<p class="text-[0.72rem] text-neutral-400 leading-relaxed mb-2.5">' + q.exp + '</p>'
+                 +  '<button class="norma-chip" onclick="openNorma(\'' + q.k + '\')"><i data-lucide="scale" class="w-3 h-3"></i> Ver la norma</button>'
+                 +  '</div>'
+                 +  '<div class="flex items-center justify-between mt-5">'
+                 +  (quizIdx > 0 ? '<button onclick="quizNav(-1)" class="text-xs font-heading text-neutral-500 hover:text-white transition-colors flex items-center gap-1.5"><i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Anterior</button>' : '<span></span>')
+                 +  '<button onclick="quizNav(1)" class="bg-[#239b48] text-black font-heading font-medium text-xs px-5 py-2.5 rounded-full hover:scale-105 transition-transform flex items-center gap-2">'
+                 +  (quizIdx === QUIZ.length - 1 ? 'Ver resultado' : 'Siguiente pregunta') + '<i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></button></div>';
+        }
+        html += '</div>';
+        document.getElementById('quizBox').innerHTML = html;
+        lucide.createIcons();
+    }
+
+    function answerQuiz(pick) {
+        state.quiz[quizIdx] = { ok: pick === QUIZ[quizIdx].c, pick: pick };
+        saveState();
+        renderQuiz();
+    }
+    function quizNav(d) {
+        quizIdx = Math.max(0, Math.min(QUIZ.length, quizIdx + d));
+        renderQuiz();
+    }
+    function resetQuiz() { state.quiz = {}; quizIdx = 0; saveState(); renderQuiz(); }
+
+    function renderQuizResult() {
+        const s = quizScore();
+        const pct = Math.round(s / QUIZ.length * 100);
+        document.getElementById('quizIdx').textContent = QUIZ.length;
+        document.getElementById('quizScore').textContent = s;
+        document.getElementById('quizProgress').style.width = '100%';
+        const msg = pct === 100 ? 'Dominio completo del marco normativo.'
+                  : pct >= 67 ? 'Buen manejo. Revise las preguntas falladas y sus artículos.'
+                  : 'Conviene repasar los temas 1, 2 y 4 antes de aplicar el checklist en su dependencia.';
+        document.getElementById('quizBox').innerHTML =
+            '<div class="bg-[#050505]/80 border border-white/10 rounded-2xl p-8 text-center">'
+            + '<div class="w-20 h-20 rounded-full border-2 border-[#239b48]/35 flex items-center justify-center mx-auto mb-5" style="animation: pulse-glow 2s infinite;">'
+            +   '<p class="font-heading text-2xl font-light text-[#239b48] tracking-tighter">' + pct + '%</p></div>'
+            + '<p class="font-heading font-medium text-xl tracking-tight mb-1.5">' + s + ' de ' + QUIZ.length + ' correctas</p>'
+            + '<p class="text-sm text-neutral-400 font-light mb-7 max-w-md mx-auto leading-relaxed">' + msg + '</p>'
+            + '<div class="flex flex-col sm:flex-row items-center justify-center gap-3">'
+            +   '<button onclick="resetQuiz()" class="font-heading font-medium text-xs px-6 py-3 rounded-full border border-white/15 text-neutral-300 hover:border-[#239b48]/60 hover:text-white transition-all flex items-center gap-2"><i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Repetir</button>'
+            +   '<button onclick="goToSlide(12)" class="bg-[#239b48] text-black font-heading font-medium text-xs px-6 py-3 rounded-full hover:scale-105 transition-transform flex items-center gap-2"><i data-lucide="library" class="w-3.5 h-3.5"></i> Ver fuentes normativas</button>'
+            + '</div></div>';
+        lucide.createIcons();
+    }
+
+    /* -- Grid de fuentes -- */
+    function buildFuentes() {
+        const orden = ['aufa','ley594','ley1712','dec1080','ley1437','ley527','ley1581','ley1273','disciplinario','iso','derogados'];
+        document.getElementById('fuentesGrid').innerHTML = orden.map(k => {
+            const n = NORMAS[k];
+            const der = k === 'derogados';
+            return '<div class="card-hover ' + (der ? 'risk-card' : 'success-card') + ' bg-[#050505]/80 border border-white/10 rounded-xl p-4 cursor-pointer" onclick="openNorma(\'' + k + '\')">'
+                 + '<p class="text-[0.58rem] font-mono tracking-widest uppercase ' + (der ? 'text-red-400' : 'text-[#239b48]') + ' mb-1.5">' + n.kicker + '</p>'
+                 + '<p class="font-heading font-medium text-[0.85rem] leading-snug mb-1.5">' + n.title + '</p>'
+                 + '<p class="text-[0.65rem] text-neutral-500 leading-relaxed mb-2.5">' + (n.subtitle || '') + '</p>'
+                 + '<p class="text-[0.6rem] font-heading ' + (der ? 'text-red-300' : 'text-[#6ee7a0]') + ' flex items-center gap-1.5">'
+                 + '<i data-lucide="book-open" class="w-3 h-3"></i> ' + n.arts.length + ' entradas citables</p></div>';
+        }).join('');
+    }
+
+    /* -- Tabs genéricas -- */
+    function switchTab(group, panel) {
+        document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === panel));
+        document.querySelectorAll('.tab-panel[data-group="' + group + '"]').forEach(p =>
+            p.classList.toggle('active', p.dataset.panel === panel));
+        lucide.createIcons();
+    }
+
+    /* =========================================================
+       EVENTOS GLOBALES
+       ========================================================= */
+    document.addEventListener('click', (e) => {
+        const chip = e.target.closest('.norma-chip[data-norma]');
+        if (chip) { e.stopPropagation(); openNorma(chip.dataset.norma); }
+    });
+
+    document.getElementById('progressTrack').addEventListener('click', (e) => {
+        const ratio = e.clientX / window.innerWidth;
+        goToSlide(Math.min(totalSlides - 1, Math.floor(ratio * totalSlides)));
+    });
+
+    document.addEventListener('keydown', (e) => {
+        const overlayOpen = !!document.querySelector('.overlay.open');
+        if (e.key === 'Escape') { closeOverlays(); return; }
+        if (overlayOpen && e.key !== 'Escape') {
+            if (e.key === 'm' || e.key === 'M' || e.key === '?') { closeOverlays(); }
+            return;
+        }
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prevSlide(); }
+        else if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
+        else if (e.key === 'End') { e.preventDefault(); goToSlide(totalSlides - 1); }
+        else if (e.key === 'm' || e.key === 'M') { e.preventDefault(); toggleIndex(); }
+        else if (e.key === 'n' || e.key === 'N') { e.preventDefault(); goToSlide(4); }
+        else if (e.key === '?') { e.preventDefault(); toggleHelp(); }
+        else if (e.key === 'f' || e.key === 'F') {
+            e.preventDefault();
+            if (document.fullscreenElement) document.exitFullscreen();
+            else document.documentElement.requestFullscreen().catch(() => {});
+        }
+        else if (/^[1-9]$/.test(e.key)) { e.preventDefault(); goToSlide(parseInt(e.key, 10) - 1); }
+    });
+
+    /* Swipe (solo horizontal y sin interferir con el scroll interno) */
+    let tsX = 0, tsY = 0;
+    document.addEventListener('touchstart', (e) => {
+        tsX = e.changedTouches[0].screenX;
+        tsY = e.changedTouches[0].screenY;
+    }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+        if (document.querySelector('.overlay.open')) return;
+        const dx = tsX - e.changedTouches[0].screenX;
+        const dy = tsY - e.changedTouches[0].screenY;
+        if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.8) {
+            if (dx > 0) nextSlide(); else prevSlide();
+        }
+    }, { passive: true });
+
+    /* =========================================================
+       ARRANQUE
+       ========================================================= */
+    loadState();
+    buildDots();
+    buildConceptos();
+    buildTimeline();
+    buildResponsabilidades();
+    buildRiskBoard();
+    buildRiesgosNorma();
+    buildConsecuencias();
+    buildChecklist();
+    buildQuiz();
+    buildFuentes();
+    updateUI();
+    lucide.createIcons();
     </script>
 </body>
 </html>
