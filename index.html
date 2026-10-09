@@ -1475,8 +1475,15 @@
         if (slides[currentSlide].querySelector('[data-count]')) runCounters(slides[currentSlide]);
     }
 
+    const QUIZ_SLIDE = 10; // índice de la diapositiva "Autoevaluación"
+
     function goToSlide(index) {
         if (index < 0 || index >= totalSlides || index === currentSlide) return;
+        // Si se sale del quiz ya terminado, se reinicia para la próxima persona/grupo.
+        // El progreso a medio terminar se conserva si solo se está navegando de ida y vuelta.
+        if (currentSlide === QUIZ_SLIDE && index !== QUIZ_SLIDE && typeof quizIdx !== 'undefined' && quizIdx >= QUIZ.length) {
+            resetQuiz();
+        }
         currentSlide = index;
         updateUI();
     }
