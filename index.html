@@ -27,13 +27,14 @@
 
         /* Institutional background artwork.
            The source artwork carries its own "Alcaldía de Barranquilla"
-           wordmark centered near the top; the image is shifted up so that
-           wordmark tucks behind the fixed header instead of sitting behind
-           slide titles, and darkened further at the very top for a clean seam. */
+           wordmark at the top-left; the image is shifted up so that wordmark
+           tucks behind the fixed header (which already shows the logo), and
+           darkened at the very top for a clean seam. The bottom is kept
+           lighter so the sunset skyline stays visible. */
         .bg-artwork {
             background-image:
-                linear-gradient(180deg, rgba(5,15,26,0.95) 0%, rgba(5,15,26,0.88) 10%, rgba(5,15,26,0.55) 28%, rgba(5,15,26,0.58) 72%, rgba(5,15,26,0.85) 100%),
-                url("Fondo 1.png");
+                linear-gradient(180deg, rgba(5,15,26,0.95) 0%, rgba(5,15,26,0.88) 10%, rgba(5,15,26,0.5) 28%, rgba(5,15,26,0.45) 72%, rgba(5,15,26,0.6) 100%),
+                url("Background.jpg");
             background-size: cover, cover;
             background-position: center, center -92px;
             background-repeat: no-repeat, no-repeat;
